@@ -162,7 +162,7 @@ export default function ProfileBuilder() {
                     ...sanitizedBasic,
                     workExperiences: sanitizedWork,
                     projects: sanitizedProjects,
-                    certs: sanitizedCerts,
+                    certifications: sanitizedCerts,
                     education: sanitizedEducation,
                     skills: sanitizedSkills,
                     achievements: sanitizedAchievements,
@@ -173,12 +173,12 @@ export default function ProfileBuilder() {
                 const payload = {
                     ...sanitizedBasic,
                     workExperiences: sanitizedWork,
-                    Projects: sanitizedProjects,
-                    Certifications: sanitizedCerts,
-                    Education: sanitizedEducation,
-                    Skills: sanitizedSkills,
-                    Achievements: sanitizedAchievements,
-                    Miscellanous: sanitizedMisc
+                    projects: sanitizedProjects,
+                    certifications: sanitizedCerts,
+                    education: sanitizedEducation,
+                    skills: sanitizedSkills,
+                    achievements: sanitizedAchievements,
+                    miscellaneous: sanitizedMisc
                 };
                 response = await api.post("/profile/create", payload);
             }
