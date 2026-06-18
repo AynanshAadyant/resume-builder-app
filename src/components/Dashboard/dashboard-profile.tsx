@@ -7,10 +7,13 @@ import { toast } from "sonner"
 import { sanitizeString, sanitizeMultilineString, sanitizeArray } from "@/utils/sanitizer"
 import { useDispatch } from "react-redux"
 import { setProfile } from "../../store/slice/profileSlice"
+import { useAppSelector } from "@/store/hooks"
+
 
 export default function ProfileBuilder() {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false);
+    const profile = useAppSelector( (state) => state.profile.profile )
     
     // States
     const [basicInfo, setBasicInfo] = useState<any>({
@@ -34,14 +37,17 @@ export default function ProfileBuilder() {
 
     const fetchProfile = async () => {
         try {
-            setLoading(true);
-            const response = await api.get("/profile/get");
-            if (response.success && response.data) {
-                dispatch( setProfile( response.data ))
-                const d = response.data;
-                if (d.profile) {
-                    setBasicInfo(d.profile);
+                setLoading(true);
+                let d;
+                if( profile ) 
+                    d = profile;
+                else {
+                    const response = await api.get( "/profile/get" )
+                    if( response.success ) 
+                        d = response.data;
+                    dispatch( setProfile( d ) )
                 }
+                setBasicInfo( d.profile );
                 setEducation(d.education || []);
                 setProjects(d.projects || []);
                 setWorkExperiences(d.workExperiences || []);
@@ -50,7 +56,7 @@ export default function ProfileBuilder() {
                 setAchievements(d.achievements || []);
                 setMiscellaneous(d.miscellaneous || []);
             }
-        } catch (e: any) {
+        catch (e: any) {
             console.error("Error fetching profile:", e);
             toast.error(e.message || "Failed to load profile");
         } finally {
@@ -83,7 +89,7 @@ export default function ProfileBuilder() {
 
             // Sanitize basic profile
             const sanitizedBasic = {
-                phoneNo: Number(basicInfo.phoneNo) || 0,
+                phoneNo: basicInfo.phoneNo,
                 location: sanitizeString(basicInfo.location),
                 linkedIn: sanitizeString(basicInfo.linkedIn),
                 github: sanitizeString(basicInfo.github),
@@ -198,7 +204,7 @@ export default function ProfileBuilder() {
     };
 
     return (
-        <div className="max-w-[1000px] mx-auto pb-24 text-white">
+        <div className="profile-builder-clean max-w-[1000px] mx-auto pb-24 text-white">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                 <div>
@@ -215,15 +221,15 @@ export default function ProfileBuilder() {
                 </Button>
             </div>
 
-            <main className="bg-[var(--surface-container-low)] border border-white/5 rounded-xl p-8">
+            <main className="bg-[var(--surface-container-low)] border border-white/5 rounded-xl px-10 py-5">
                 <Tabs defaultValue="basic" className="w-full">
                     <div className="border-b border-white/5 mb-8">
-                        <TabsList className="bg-transparent h-auto p-0 flex gap-6 justify-start overflow-x-auto">
+                        <TabsList className="w-auto h-auto p-0 flex flex-row bg-gray-200 items-center justify-center overflow-y-visible ">
                             {["basic", "education", "workex", "projects", "skills", "certifications", "achievements", "misc"].map((tab) => (
                                 <TabsTrigger 
                                     key={tab}
                                     value={tab} 
-                                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-[var(--primary)] data-[state=active]:bg-transparent data-[state=active]:text-[var(--primary)] text-[var(--on-surface-variant)] font-semibold text-xs uppercase tracking-widest pb-4 px-2 hover:text-white"
+                                    className="rounded-lg px-4 uppercase data-[state=active]:bg-gray-400 data-[state=active]:text-[var(--surface)] "
                                 >
                                     {tab === "workex" ? "Work Experience" : tab === "misc" ? "Miscellaneous" : tab}
                                 </TabsTrigger>
@@ -233,6 +239,7 @@ export default function ProfileBuilder() {
 
                     {/* Basic Info */}
                     <TabsContent value="basic" className="space-y-6 mt-0">
+                        <h1> Basic Information : </h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Phone Number *</label>

@@ -42,11 +42,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
 
   return (
-    <Sidebar className="border-r border-[var(--outline-variant)]/10 bg-[var(--surface-container-low)]" {...props}>
-      <SidebarHeader className="mb-8 px-4 pt-6">
+    <Sidebar className="border-r border-slate-200 bg-white" {...props}>
+      <SidebarHeader className="mb-6 px-4 pt-6">
         <Link to="/dashboard" className="flex flex-col">
-          <h1 className="text-3xl font-bold text-[var(--primary)] tracking-tight font-['Satoshi']">ResumeAI</h1>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)] mt-1 font-['Inter']">Career OS</p>
+          <h1 className="font-['Satoshi'] text-2xl font-bold text-slate-950">ResumeAI</h1>
+          <p className="mt-1 font-['Inter'] text-xs font-semibold uppercase text-slate-500">Career OS</p>
         </Link>
       </SidebarHeader>
       
@@ -58,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 const isActive = location.pathname === item.url || (item.url !== '/dashboard' && location.pathname.startsWith(item.url));
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive} className="hover:bg-[var(--surface-container-highest)] data-[active=true]:bg-[var(--surface-container-highest)] data-[active=true]:text-[var(--primary)] text-[var(--on-surface-variant)] transition-colors py-6">
+                    <SidebarMenuButton asChild isActive={isActive} className="py-5 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 data-[active=true]:bg-slate-950 data-[active=true]:text-white">
                       <Link to={item.url} className="flex items-center gap-3">
                         <item.icon className="w-5 h-5" />
                         <span className="text-base font-['Inter']">{item.title}</span>
@@ -72,13 +72,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="px-4 pb-6 border-t border-[var(--outline-variant)]/10 pt-6 mt-auto">
+      <SidebarFooter className="mt-auto border-t border-slate-200 px-4 pb-6 pt-6">
         <SidebarMenu className="space-y-1 mb-6">
           {data.navFooter.map((item) => {
             const isActive = location.pathname.startsWith(item.url);
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={isActive} className={`py-6 transition-colors ${isActive ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-bold' : 'text-[var(--on-surface-variant)] hover:bg-[var(--surface-container-highest)]'}`}>
+                <SidebarMenuButton asChild isActive={isActive} className={`py-5 transition-colors ${isActive ? 'bg-cyan-50 text-cyan-700 font-bold' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-950'}`}>
                   <Link to={item.url} className="flex items-center gap-3">
                     <item.icon className="w-5 h-5" />
                     <span className="text-base font-['Inter']">{item.title}</span>
@@ -89,8 +89,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           })}
         </SidebarMenu>
         
-        <div className="p-4 rounded-xl bg-[var(--surface-container-highest)]/50 border border-[var(--outline-variant)]/10">
-          <Button className="w-full bg-[var(--primary)] text-[var(--on-primary)] hover:opacity-90 font-semibold text-xs uppercase tracking-widest py-6 rounded-lg transition-transform active:scale-[0.98]">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <Button className="w-full rounded-lg bg-slate-950 py-5 text-xs font-semibold uppercase text-white transition-transform hover:bg-slate-800 active:scale-[0.98]">
             Upgrade to Pro
           </Button>
         </div>
@@ -99,4 +99,3 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   )
 }
-

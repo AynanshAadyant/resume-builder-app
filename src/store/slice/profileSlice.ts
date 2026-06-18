@@ -1,20 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import type { CompleteProfile } from "@/types/profile.type";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export const profileSlice = createSlice( {
-    name : "profile",
-    initialState: {
-        profile : null //stores all data of profile
-    },
-    reducers : {
-        setProfile : (state,action) => {
-            state.profile = action.payload
+interface ProfileState {
+    profile: CompleteProfile | null;
+}
+
+const initialState: ProfileState = {
+    profile: null,
+};
+
+export const profileSlice = createSlice({
+    name: "profile",
+    initialState,
+    reducers: {
+        setProfile: (state, action: PayloadAction<CompleteProfile>) => {
+            state.profile = action.payload;
         },
-        logout : ( state ) => {
-            state.profile = null
-        }
-    }
-})
+        logout: (state) => {
+            state.profile = null;
+        },
+    },
+});
 
-export const {setProfile, logout} = profileSlice.actions
-
-export default profileSlice.reducer
+export const { setProfile, logout } = profileSlice.actions;
+export default profileSlice.reducer;

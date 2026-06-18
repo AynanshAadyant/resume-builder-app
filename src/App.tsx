@@ -34,7 +34,7 @@ export default function App() {
         <Route path="/auth" element={<AuthPage />}>
           <Route
             path="signup"
-            element={<SignupForm className="w-1/2 bg-black" />}
+            element={<SignupForm />}
           />
           <Route path="login" element={<LoginForm />} />
         </Route>

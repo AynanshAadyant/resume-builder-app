@@ -81,19 +81,19 @@ export default function SignupForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 w-full text-white", className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
-          <CardDescription>
-            Enter your email below to create your account
+    <div className={cn("flex w-full flex-col gap-5", className)} {...props}>
+      <Card className="rounded-lg border border-none bg-(--surface-container) shadow-none">
+        <CardHeader className="text-left">
+          <CardTitle className="text-3xl font-bold text-white">Create your account</CardTitle>
+          <CardDescription className="text-gray-200">
+            Start with your profile, then tailor resumes for every role.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                <FieldLabel htmlFor="name" className="text-white">Full Name</FieldLabel>
                 <Input 
                   id="name" 
                   name="name"
@@ -102,10 +102,11 @@ export default function SignupForm({
                   value={form.name}
                   onChange={handleChange}
                   required 
+                  className="rounded-lg border-none bg-(--surface-container-high) text-gray-400 placeholder:text-slate-600 focus-visible:ring-cyan-400"
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email" className="text-white">Email</FieldLabel>
                 <Input
                   id="email"
                   name="email"
@@ -114,12 +115,13 @@ export default function SignupForm({
                   value={form.email}
                   onChange={handleChange}
                   required
+                  className="rounded-lg border-none bg-(--surface-container-high) text-gray-400 placeholder:text-slate-600 focus-visible:ring-cyan-400"
                 />
               </Field>
               <Field>
-                <Field className="grid grid-cols-2 gap-4">
+                <Field className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <FieldLabel htmlFor="password" className="text-white">Password</FieldLabel>
                     <Input 
                       id="password" 
                       name="password"
@@ -127,10 +129,11 @@ export default function SignupForm({
                       value={form.password}
                       onChange={handleChange}
                       required 
+                  className="rounded-lg border-none bg-(--surface-container-high) text-gray-400 placeholder:text-slate-600 focus-visible:ring-cyan-400"
                     />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="confirm-password">
+                    <FieldLabel htmlFor="confirm-password" className="text-white">
                       Confirm Password
                     </FieldLabel>
                     <Input 
@@ -140,10 +143,11 @@ export default function SignupForm({
                       value={form.confirmPassword}
                       onChange={handleChange}
                       required 
+                  className="rounded-lg border-none bg-(--surface-container-high) text-gray-400 placeholder:text-slate-600 focus-visible:ring-cyan-400"
                     />
                   </Field>
                 </Field>
-                <FieldDescription>
+                <FieldDescription className="text-white">
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
@@ -151,21 +155,21 @@ export default function SignupForm({
                 <Button 
                   type="submit" 
                   disabled={loading}
-                  className="border-0 bg-white text-gray-900 w-1/2 mx-auto disabled:opacity-50"
+                  className="w-full rounded-lg border-0 bg-slate-950 text-white hover:bg-slate-800 disabled:opacity-50"
                 >
                   {loading ? "Creating..." : "Create Account"}
                 </Button>
-                <FieldDescription className="text-center">
-                  Already have an account? <Link to="/auth/login">Sign in</Link>
+                <FieldDescription className="text-center text-white">
+                  Already have an account? <Link to="/auth/login" className="font-semibold text-white hover:underline">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+      <FieldDescription className="px-6 text-center text-white">
+        By clicking continue, you agree to our <a href="#" className="text-white underline">Terms of Service</a>{" "}
+        and <a href="#" className="text-white underline">Privacy Policy</a>.
       </FieldDescription>
     </div>
   )

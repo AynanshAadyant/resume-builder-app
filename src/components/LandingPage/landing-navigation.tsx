@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router"
+import { Sparkles } from "lucide-react";
 
 function AuthButtons() {
     const isAuthenticated = false;
@@ -22,12 +23,23 @@ function AuthButtons() {
 export default function Navigation() {
     const logo = null;
     return (
-        <nav className="w-full flex flex-row justify-between items-center p-3 px-15 readonly">
+        <nav className="fixed flex flex-row justify-evenly w-full inset-x-0 top-0 z-50 border-b border-white/10 bg-[#08111d]/75 px-5 py-4 backdrop-blur-xl md:px-12">
             <section className="left">
-                <a href=""> {logo ? <img src={logo} alt="Logo" /> : <span className="text-white font-bold text-3xl"> ResumeAI </span>} </a>
+                <a href="" className="flex items-center gap-3">
+                    {logo ? <img src={logo} alt="Logo" /> : (
+                        <>
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-300/30 bg-cyan-300/10 text-cyan-200">
+                                <Sparkles className="h-5 w-5" />
+                            </span>
+                            <span className="text-2xl font-bold text-white">ResumeAI</span>
+                        </>
+                    )}
+                </a>
             </section>
-            <section className="middle">
-
+            <section className="middle hidden items-center gap-8 text-sm font-medium text-slate-300 md:flex">
+                <a href="#features" className="hover:text-white">Features</a>
+                <a href="#workflow" className="hover:text-white">Workflow</a>
+                <a href="#proof" className="hover:text-white">Results</a>
             </section>
             <section className="right">
                 <AuthButtons />

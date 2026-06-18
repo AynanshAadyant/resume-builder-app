@@ -1,59 +1,55 @@
 import api from "@/api/api";
 import { useAppDispatch } from "@/store/hooks";
 import { authenticate } from "@/store/slice/authSlice";
+import { setProfile } from "@/store/slice/profileSlice";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
-import { toast } from "sonner";
-
+import { Navigate, Outlet } from "react-router";
 
 export default function ProtectedRoute() {
-    const [isAuthenticated, setIsAuthenticted ] = useState( false )
-    const [loading, setLoading] = useState( true )
+    const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
-    
-    const fetchUser = async() => {
-        try{
-            setLoading( true )
-            const response = await api.get('/auth/current' )
-            if( response.success || response.status === 200 ) {
-                setIsAuthenticted( true )
-                dispatch( authenticate( response.body ) )
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const initialize = async () => {
+            try {
+                const userResponse = await api.get("/auth/current");
+
+                if (
+                    userResponse.success ||
+                    userResponse.status === 200
+                ) {
+                    setIsAuthenticated(true);
+                    dispatch(authenticate(userResponse.body));
+
+                    const profileResponse = await api.get("/profile/get");
+
+                    if (profileResponse.success) {
+                        dispatch(setProfile(profileResponse.data));
+                    }
+                }
+            } catch (e: any) {
+                console.error(e.message);
+            } finally {
+                setLoading(false);
             }
-            if( response.status === 500 ) {
-                toast.error("Server issue" )
-                console.log(response.message )
-            }
-        }
-        catch( e : any ) {
-            console.error( e.message || "Something went wrong" )
-        }
-        finally {
-            setLoading( false );
-        }
-    }
+        };
 
-    useEffect( () => {
-        fetchUser();
-    }, [] )
+        initialize();
+    }, [dispatch]);
 
-    if( loading )
-    {
-        return(
-            <div className="flex items-center justify-center min-h-screen bg-slate-900">
-                <div className="w-12 h-12 border-4 border-white/20 border-t-sky-400 rounded-full animate-spin"></div>
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#f6f8fb]">
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-cyan-500" />
             </div>
-        )
+        );
     }
-    else if( isAuthenticated )
-    return (
-        <>
-            <Outlet />
-        </>
-    );
-    else if( !isAuthenticated )
-    {
-        navigate('/auth/login' )
+
+    if (!isAuthenticated) {
+        return <Navigate to="/auth/login" replace />;
     }
+
+    return <Outlet />;
 }

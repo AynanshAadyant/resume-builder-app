@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles, FileText } from "lucide-react";
+import { FileText, Sparkles, UserCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -13,17 +13,14 @@ export default function DashboardSettings() {
     const [userName, setUserName] = useState("");
     const [resumesCount, setResumesCount] = useState(0);
 
-    // AI preference states
     const [autoQuantify, setAutoQuantify] = useState(true);
     const [toneAdjustment, setToneAdjustment] = useState(true);
     const [semanticKeyword, setSemanticKeyword] = useState(false);
 
-    // Export states
     const [typography, setTypography] = useState("IBM Plex Serif");
     const [margin, setMargin] = useState(2.5);
 
     useEffect(() => {
-        // Load initial data
         const loadInitialData = async () => {
             try {
                 const userRes = await api.get("/auth/current");
@@ -31,7 +28,7 @@ export default function DashboardSettings() {
                     setUserName(userRes.body.name || "Alex");
                     setUserEmail(userRes.body.email || "alex@example.com");
                 }
-                const resumeRes = await api.get("/resume/all");
+                const resumeRes = await api.get("/resume/");
                 if (resumeRes.success && resumeRes.resumes) {
                     setResumesCount(resumeRes.resumes.length);
                 }
@@ -41,7 +38,6 @@ export default function DashboardSettings() {
         };
         loadInitialData();
 
-        // Load settings from localStorage
         const storedAi = localStorage.getItem("resumeai:settings:ai");
         if (storedAi) {
             try {
@@ -88,179 +84,159 @@ export default function DashboardSettings() {
         toast.info("Settings reset to defaults");
     };
 
+    const SettingRow = ({ title, description, checked, onCheckedChange }: any) => (
+        <div className="flex items-center justify-between gap-6 rounded-lg border border-slate-200 bg-white p-4">
+            <div>
+                <p className="font-semibold text-slate-950">{title}</p>
+                <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p>
+            </div>
+            <Switch checked={checked} onCheckedChange={onCheckedChange} className="data-[state=checked]:bg-cyan-600" />
+        </div>
+    );
+
     return (
-        <div className="max-w-[1200px] mx-auto text-white">
-            {/* Page Header */}
-            <header className="mb-12">
-                <h2 className="text-4xl font-bold text-[var(--on-surface)] mb-1 font-['Satoshi'] tracking-tight">Settings</h2>
-                <p className="text-[var(--on-surface-variant)] text-base">Manage your career operating system preferences and AI configurations.</p>
+        <div className="mx-auto w-full max-w-[1180px] pb-12">
+            <header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                <div>
+                    <h2 className="font-['Satoshi'] text-3xl font-bold text-slate-950">Settings</h2>
+                    <p className="mt-2 text-base text-slate-500">Manage account details, AI behavior, and export defaults.</p>
+                </div>
+                <div className="flex gap-3">
+                    <Button onClick={handleReset} variant="outline" className="rounded-lg border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
+                        Reset
+                    </Button>
+                    <Button onClick={handleSave} className="rounded-lg bg-slate-950 text-white hover:bg-slate-800">
+                        Save Changes
+                    </Button>
+                </div>
             </header>
 
-            {/* Tab Navigation */}
-            <Tabs defaultValue="ai-preferences" className="w-full">
-                <div className="border-b border-[var(--outline-variant)]/10 mb-12 overflow-x-auto">
-                    <TabsList className="bg-transparent h-auto p-0 flex gap-6 justify-start">
-                        <TabsTrigger 
-                            value="account" 
-                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[var(--primary)] data-[state=active]:bg-transparent data-[state=active]:text-[var(--primary)] text-[var(--on-surface-variant)] font-semibold text-xs uppercase tracking-widest pb-4 px-2"
-                        >
-                            Account
-                        </TabsTrigger>
-                        <TabsTrigger 
-                            value="ai-preferences" 
-                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[var(--primary)] data-[state=active]:bg-transparent data-[state=active]:text-[var(--primary)] text-[var(--on-surface-variant)] font-semibold text-xs uppercase tracking-widest pb-4 px-2"
-                        >
-                            AI Preferences
-                        </TabsTrigger>
-                        <TabsTrigger 
-                            value="export" 
-                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[var(--primary)] data-[state=active]:bg-transparent data-[state=active]:text-[var(--primary)] text-[var(--on-surface-variant)] font-semibold text-xs uppercase tracking-widest pb-4 px-2"
-                        >
-                            Export Defaults
-                        </TabsTrigger>
-                    </TabsList>
-                </div>
+            <Tabs defaultValue="account" className="w-full">
+                <TabsList className="mb-6 h-auto rounded-lg border border-slate-200 bg-white p-1">
+                    <TabsTrigger value="account" className="rounded-md data-[state=active]:bg-slate-950 data-[state=active]:text-white">
+                        Account
+                    </TabsTrigger>
+                    <TabsTrigger value="ai-preferences" className="rounded-md data-[state=active]:bg-slate-950 data-[state=active]:text-white">
+                        AI Preferences
+                    </TabsTrigger>
+                    <TabsTrigger value="export" className="rounded-md data-[state=active]:bg-slate-950 data-[state=active]:text-white">
+                        Export Defaults
+                    </TabsTrigger>
+                </TabsList>
 
-                <TabsContent value="ai-preferences">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        {/* AI Assistance Panel */}
-                        <div className="col-span-1 lg:col-span-8 space-y-6">
-                            <Card className="bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 shadow-none backdrop-blur-md relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--secondary)]/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
-                                <CardHeader className="flex flex-row items-center gap-2 pb-6">
-                                    <Sparkles className="w-6 h-6 text-[var(--secondary)]" />
-                                    <CardTitle className="text-2xl font-medium text-[var(--on-surface)] font-['Satoshi']">Intelligence Layers</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4 relative z-10">
-                                    <div className="flex items-center justify-between p-4 bg-[var(--surface-container)] rounded-lg border border-[var(--outline-variant)]/10">
-                                        <div>
-                                            <p className="font-bold text-[var(--on-surface)]">Auto-Quantify Metrics</p>
-                                            <p className="text-sm text-[var(--on-surface-variant)]">Automatically transform passive descriptions into data-driven achievements.</p>
-                                        </div>
-                                        <Switch checked={autoQuantify} onCheckedChange={setAutoQuantify} className="data-[state=checked]:bg-[var(--primary)]" />
-                                    </div>
-                                    <div className="flex items-center justify-between p-4 bg-[var(--surface-container)] rounded-lg border border-[var(--outline-variant)]/10">
-                                        <div>
-                                            <p className="font-bold text-[var(--on-surface)]">Tone Adjustment</p>
-                                            <p className="text-sm text-[var(--on-surface-variant)]">Analyze and align your writing style with specific industry standards.</p>
-                                        </div>
-                                        <Switch checked={toneAdjustment} onCheckedChange={setToneAdjustment} className="data-[state=checked]:bg-[var(--primary)]" />
-                                    </div>
-                                    <div className="flex items-center justify-between p-4 bg-[var(--surface-container)] rounded-lg border border-[var(--outline-variant)]/10">
-                                        <div>
-                                            <p className="font-bold text-[var(--on-surface)]">Semantic Keyword Injection</p>
-                                            <p className="text-sm text-[var(--on-surface-variant)]">Optimize for Applicant Tracking Systems using real-time job market data.</p>
-                                        </div>
-                                        <Switch checked={semanticKeyword} onCheckedChange={setSemanticKeyword} className="data-[state=checked]:bg-[var(--primary)]" />
-                                    </div>
-                                </CardContent>
-                            </Card>
+                <TabsContent value="account">
+                    <div className="grid gap-5 lg:grid-cols-[1fr_0.7fr]">
+                        <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
+                            <CardHeader className="flex flex-row items-center gap-3">
+                                <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
+                                    <UserCircle className="h-5 w-5" />
+                                </div>
+                                <CardTitle className="text-xl text-slate-950">Account Details</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid gap-4 md:grid-cols-2">
+                                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                                    <span className="text-xs font-semibold uppercase text-slate-400">Name</span>
+                                    <p className="mt-1 text-base font-medium text-slate-950">{userName || "Alex"}</p>
+                                </div>
+                                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                                    <span className="text-xs font-semibold uppercase text-slate-400">Email Address</span>
+                                    <p className="mt-1 text-base font-medium text-slate-950">{userEmail || "alex@example.com"}</p>
+                                </div>
+                                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 md:col-span-2">
+                                    <span className="text-xs font-semibold uppercase text-slate-400">Active Resumes</span>
+                                    <p className="mt-1 text-base font-medium text-slate-950">{resumesCount} tailored resumes generated</p>
+                                </div>
+                            </CardContent>
+                        </Card>
 
-                            {/* Export Defaults Panel */}
-                            <Card className="bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 shadow-none backdrop-blur-md">
-                                <CardHeader className="flex flex-row justify-between items-center pb-6">
-                                    <div className="flex items-center gap-2">
-                                        <FileText className="w-6 h-6 text-[var(--primary)]" />
-                                        <CardTitle className="text-2xl font-medium text-[var(--on-surface)] font-['Satoshi']">Export Defaults</CardTitle>
-                                    </div>
-                                    <span className="text-xs uppercase tracking-widest px-4 py-1 bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20 rounded-full font-semibold">
-                                        PDF Engine v4.2
-                                    </span>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Default Typography</label>
-                                            <Select value={typography} onValueChange={setTypography}>
-                                                <SelectTrigger className="w-full bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 text-[var(--on-surface)] focus:ring-1 focus:ring-[var(--primary)]">
-                                                    <SelectValue placeholder="Select typography" />
-                                                </SelectTrigger>
-                                                <SelectContent className="bg-[var(--surface-container-low)] text-white border-white/5">
-                                                    <SelectItem value="IBM Plex Serif">IBM Plex Serif</SelectItem>
-                                                    <SelectItem value="Inter">Inter</SelectItem>
-                                                    <SelectItem value="Satoshi">Satoshi</SelectItem>
-                                                    <SelectItem value="System Serif">System Serif</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Page Margin</label>
-                                            <div className="flex items-center gap-4">
-                                                <input 
-                                                    type="range" 
-                                                    className="flex-1 accent-[var(--primary)]" 
-                                                    value={margin * 10} 
-                                                    onChange={(e) => setMargin(Number(e.target.value) / 10)} 
-                                                    min="10" 
-                                                    max="50" 
-                                                />
-                                                <span className="text-sm font-bold text-[var(--on-surface)]">{margin}cm</span>
-                                            </div>
-                                        </div>
-                                        <div className="col-span-full pt-4 flex gap-4">
-                                            <Button onClick={handleSave} className="flex-1 bg-[var(--primary)] text-[var(--on-primary)] hover:opacity-90 font-bold py-6 shadow-lg shadow-[var(--primary)]/20">
-                                                Save Changes
-                                            </Button>
-                                            <Button onClick={handleReset} variant="outline" className="px-12 py-6 border-[var(--outline-variant)]/30 text-[var(--on-surface)] font-bold hover:bg-[var(--surface-container-highest)] bg-transparent">
-                                                Reset
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Info/Stats Panel */}
-                        <div className="col-span-1 lg:col-span-4 space-y-6">
-                            <Card className="bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 shadow-none backdrop-blur-md relative overflow-hidden">
-                                <CardContent className="p-6 relative z-10">
-                                    <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)] mb-4">Usage Tier</h4>
-                                    <div className="flex items-end gap-1 mb-2">
-                                        <span className="text-5xl font-bold text-[var(--on-surface)] leading-none font-['Satoshi'] tracking-tighter">84</span>
-                                        <span className="text-[var(--on-surface-variant)] text-base mb-1">/ 100</span>
-                                    </div>
-                                    <p className="text-sm text-[var(--on-surface-variant)] mb-6">AI tokens remaining for this billing cycle.</p>
-                                    <div className="w-full bg-[var(--surface-container-highest)] rounded-full h-1.5 mb-6">
-                                        <div className="bg-[var(--secondary)] h-full rounded-full" style={{ width: '84%' }}></div>
-                                    </div>
-                                    <Button variant="outline" className="w-full border-[var(--secondary)]/30 text-[var(--secondary)] font-semibold text-xs uppercase tracking-widest hover:bg-[var(--secondary)]/10 bg-transparent">
-                                        Get Unlimited Access
-                                    </Button>
-                                </CardContent>
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--secondary)]/10 blur-[60px] -mr-16 -mt-16 rounded-full"></div>
-                            </Card>
-                        </div>
+                        <Card className="rounded-lg border-cyan-100 bg-cyan-50/70 shadow-sm">
+                            <CardContent className="p-6">
+                                <p className="text-sm font-semibold uppercase text-cyan-700">Usage Tier</p>
+                                <div className="mt-4 flex items-end gap-1">
+                                    <span className="font-['Satoshi'] text-5xl font-bold leading-none text-slate-950">84</span>
+                                    <span className="mb-1 text-base text-slate-500">/ 100 tokens</span>
+                                </div>
+                                <div className="mt-5 h-2 overflow-hidden rounded-full bg-white">
+                                    <div className="h-full rounded-full bg-cyan-600" style={{ width: "84%" }} />
+                                </div>
+                                <Button variant="outline" className="mt-6 w-full rounded-lg border-cyan-200 bg-white text-cyan-700 hover:bg-cyan-50">
+                                    Get Unlimited Access
+                                </Button>
+                            </CardContent>
+                        </Card>
                     </div>
                 </TabsContent>
-                <TabsContent value="account">
-                    <Card className="bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 shadow-none backdrop-blur-md p-6">
-                        <CardHeader className="p-0 mb-6">
-                            <CardTitle className="text-2xl font-bold font-['Satoshi']">Account Details</CardTitle>
+
+                <TabsContent value="ai-preferences">
+                    <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
+                        <CardHeader className="flex flex-row items-center gap-3">
+                            <div className="rounded-lg bg-cyan-50 p-2 text-cyan-700">
+                                <Sparkles className="h-5 w-5" />
+                            </div>
+                            <CardTitle className="text-xl text-slate-950">Intelligence Layers</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-0 space-y-4">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Name</span>
-                                <span className="text-base text-[var(--on-surface)]">{userName || "Alex"}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Email Address</span>
-                                <span className="text-base text-[var(--on-surface)]">{userEmail || "alex@example.com"}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Active Deployments</span>
-                                <span className="text-base text-[var(--on-surface)]">{resumesCount} tailored resumes generated</span>
-                            </div>
+                        <CardContent className="space-y-3">
+                            <SettingRow
+                                title="Auto-Quantify Metrics"
+                                description="Transform passive descriptions into data-driven achievements where possible."
+                                checked={autoQuantify}
+                                onCheckedChange={setAutoQuantify}
+                            />
+                            <SettingRow
+                                title="Tone Adjustment"
+                                description="Align writing style with role seniority, industry expectations, and recruiter language."
+                                checked={toneAdjustment}
+                                onCheckedChange={setToneAdjustment}
+                            />
+                            <SettingRow
+                                title="Semantic Keyword Injection"
+                                description="Optimize for ATS matching using related terms from the analyzed job description."
+                                checked={semanticKeyword}
+                                onCheckedChange={setSemanticKeyword}
+                            />
                         </CardContent>
                     </Card>
                 </TabsContent>
+
                 <TabsContent value="export">
-                    <Card className="bg-[var(--surface-container-low)] border-[var(--outline-variant)]/20 shadow-none backdrop-blur-md p-6">
-                        <CardHeader className="p-0 mb-6">
-                            <CardTitle className="text-2xl font-bold font-['Satoshi']">Export Overrides</CardTitle>
+                    <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
+                        <CardHeader className="flex flex-row items-center gap-3">
+                            <div className="rounded-lg bg-amber-50 p-2 text-amber-700">
+                                <FileText className="h-5 w-5" />
+                            </div>
+                            <CardTitle className="text-xl text-slate-950">Export Defaults</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-0">
-                            <p className="text-[var(--on-surface-variant)] text-base font-['Inter'] leading-relaxed">
-                                Choose custom theme presets and styling settings that override templates when building new resumes. Margins, fonts, and borders are optimized automatically to match selected templates.
+                        <CardContent className="grid gap-6 md:grid-cols-2">
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold uppercase text-slate-400">Default Typography</label>
+                                <Select value={typography} onValueChange={setTypography}>
+                                    <SelectTrigger className="w-full rounded-lg border-slate-200 bg-slate-50 text-slate-950 focus:ring-cyan-400">
+                                        <SelectValue placeholder="Select typography" />
+                                    </SelectTrigger>
+                                    <SelectContent className="border-slate-200 bg-white text-slate-950">
+                                        <SelectItem value="IBM Plex Serif">IBM Plex Serif</SelectItem>
+                                        <SelectItem value="Inter">Inter</SelectItem>
+                                        <SelectItem value="Satoshi">Satoshi</SelectItem>
+                                        <SelectItem value="System Serif">System Serif</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold uppercase text-slate-400">Page Margin</label>
+                                <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                                    <input
+                                        type="range"
+                                        className="flex-1 accent-cyan-600"
+                                        value={margin * 10}
+                                        onChange={(e) => setMargin(Number(e.target.value) / 10)}
+                                        min="10"
+                                        max="50"
+                                    />
+                                    <span className="min-w-12 text-sm font-bold text-slate-950">{margin}cm</span>
+                                </div>
+                            </div>
+                            <p className="text-sm leading-6 text-slate-500 md:col-span-2">
+                                These defaults are applied when generating or exporting new resumes. Template-specific constraints can still adjust spacing automatically.
                             </p>
                         </CardContent>
                     </Card>
