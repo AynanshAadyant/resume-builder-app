@@ -5,7 +5,7 @@ class API {
 
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: import.meta.env.VITE_BACKEND_URL,
+            baseURL: "/api",
             withCredentials: true,
         });
     }
