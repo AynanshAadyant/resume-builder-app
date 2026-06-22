@@ -5,7 +5,7 @@ class API {
 
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: import.meta.env.STATUS === "PROD" ? "/api" : import.meta.env.VITE_BACKEND_URL,
+            baseURL: import.meta.env.VITE_STATUS === "PROD" ? "/api" : import.meta.env.VITE_BACKEND_URL,
             withCredentials: true,
         });
     }
