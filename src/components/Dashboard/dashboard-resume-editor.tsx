@@ -230,9 +230,7 @@ export default function ResumeEditor() {
                 {!loading && resumes.length > 0 ? resumes.map((resume: any, idx: number) =>
                     <ResumeCard key={resume._id || idx} resume={resume} idx={idx} handleDeleteResume={handleDeleteResume} loadViewingResume={loadViewingResume} />
                 ) : !loading && (
-                    <div className="rounded-lg border border-slate-200 bg-white py-12 text-center text-sm text-slate-500 md:col-span-2 lg:col-span-3">
-                        No resumes found. Generate your first tailored resume.
-                    </div>
+                    <p></p>
                 )}
             </div>
 

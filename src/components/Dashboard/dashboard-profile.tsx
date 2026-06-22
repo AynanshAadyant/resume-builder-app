@@ -45,6 +45,8 @@ export default function ProfileBuilder() {
                     const response = await api.get( "/profile/get" )
                     if( response.success ) 
                         d = response.data;
+                    else 
+                        return;
                     dispatch( setProfile( d ) )
                 }
                 setBasicInfo( d.profile );
@@ -246,7 +248,7 @@ export default function ProfileBuilder() {
                                 <input 
                                     type="number"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
-                                    value={basicInfo.phoneNo || ""}
+                                    value={basicInfo?.phoneNo || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, phoneNo: e.target.value })}
                                     placeholder="Enter contact number"
                                 />
@@ -256,7 +258,7 @@ export default function ProfileBuilder() {
                                 <input 
                                     type="text"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
-                                    value={basicInfo.location || ""}
+                                    value={basicInfo?.location || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, location: e.target.value })}
                                     placeholder="City, Country"
                                 />
@@ -266,7 +268,7 @@ export default function ProfileBuilder() {
                                 <input 
                                     type="text"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
-                                    value={basicInfo.linkedIn || ""}
+                                    value={basicInfo?.linkedIn || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, linkedIn: e.target.value })}
                                     placeholder="https://linkedin.com/in/username"
                                 />
@@ -276,7 +278,7 @@ export default function ProfileBuilder() {
                                 <input 
                                     type="text"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
-                                    value={basicInfo.github || ""}
+                                    value={basicInfo?.github || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, github: e.target.value })}
                                     placeholder="https://github.com/username"
                                 />
@@ -286,7 +288,7 @@ export default function ProfileBuilder() {
                                 <input 
                                     type="text"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
-                                    value={basicInfo.portfolio || ""}
+                                    value={basicInfo?.portfolio || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, portfolio: e.target.value })}
                                     placeholder="https://portfolio.com"
                                 />
