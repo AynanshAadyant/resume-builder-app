@@ -5,22 +5,21 @@ import type { Skill } from "./skill.type";
 import type { Education } from "./education.type";
 import type { Certification } from "./certification.type";
 import type { Achievement } from "./achievement.type";
-import type { Miscellaneous } from "./miscellaneous.type";
 
 export interface Resume {
     _id?: any;
     user?: String | User;
-    title ?: String;
-    company ?: String;
-    role ?: String;
-    profile ?: Profile;
-    workExp : WorkExperience[];
-    projects : Project[];
-    skills : Skill[];
-    education : Education[];
-    certifications : Certification[];
-    achievements : Achievement[];
-    extra : any[];
-    createdAt ?: any;
-    ats : Number | String;
+    title?: String;
+    company?: String;
+    role?: String;
+    profile?: Profile;
+    workExp: WorkExperience[];
+    projects: Project[];
+    skills: Skill[];
+    education: Education[];
+    certifications: Certification[];
+    achievements: Achievement[];
+    extra: any[];
+    createdAt?: any;
+    ats: Number | String;
 }
