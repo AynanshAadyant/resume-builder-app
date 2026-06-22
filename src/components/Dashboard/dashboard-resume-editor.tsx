@@ -26,7 +26,6 @@ interface ResumeCardProps {
 function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: ResumeCardProps) {
     const targetRole = resume.role || "Role Resume";
     const targetCompany = resume.company || "Target Company";
-    const createdAt = resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : "recently";
     const ats = resume?.ats.toString() ?? 'N/A';
 
     return (
@@ -42,7 +41,7 @@ function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: Resu
                 <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">{targetRole}</h3>
                 <p className="mt-2 font-['Satoshi'] flex items-center gap-2 text-xl text-slate-950">
                     <Building2 className="h-4 w-4" />
-                    Target: {targetCompany} 
+                    Target: {targetCompany}
                 </p>
             </div>
 
@@ -68,7 +67,7 @@ export default function ResumeEditor() {
     const [resumes, setResumes] = useState<Resume[]>([]);
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const resumeRef = useRef( null )
+    const resumeRef = useRef(null)
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [jdsList, setJdsList] = useState<any[]>([]);
@@ -185,13 +184,13 @@ export default function ResumeEditor() {
         }
     };
 
-    const handleDownload = usePrintPdf( {
+    const handleDownload = usePrintPdf({
         ref: resumeRef,
-        fileName : "resume"
+        fileName: "resume"
     })
 
-    if( loading ) {
-        
+    if (loading) {
+
         return (
             <div className="flex min-h-screen items-center justify-center bg-[#f6f8fb]">
                 <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-cyan-500" />
@@ -216,7 +215,7 @@ export default function ResumeEditor() {
                 </Button>
             </div>
 
-                
+
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                 <button onClick={handleGenerateResume} className="group flex min-h-64 flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-slate-300 bg-white p-6 transition-colors hover:border-cyan-300 hover:bg-cyan-50/50">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 transition-colors group-hover:bg-white">
@@ -298,7 +297,7 @@ export default function ResumeEditor() {
             {viewingResume && (
                 <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-gray-400 backdrop-blur-md">
                     <div className="buttons flex flex-row items-center justify-center">
-                         <button
+                        <button
                             onClick={() => setViewingResume(null)}
                             className="fixed right-6 top-6 z-50 rounded-lg bg-white p-2 text-slate-700 shadow-lg hover:bg-slate-100"
                         >
@@ -306,7 +305,7 @@ export default function ResumeEditor() {
                         </button>
                         <button className="fixed left-6 top-6 z-50" onClick={handleDownload}> Download </button>
                     </div>
-                   
+
                     <ResumePreview ref={resumeRef} resume={viewingResume} profile={completeProfile?.profile} user={user} />
                 </div>
             )}

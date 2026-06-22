@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Brain, FileQuestion, LifeBuoy, Rocket, Search, Share, Sparkles } from "lucide-react";
+import { ArrowRight, Brain, FileQuestion, Rocket, Share, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
@@ -57,7 +57,7 @@ export default function DashboardSupport() {
                     <p className="mt-4 max-w-2xl text-base leading-7 text-slate-500">
                         Search guidance for profile setup, job description analysis, resume generation, exports, and account questions.
                     </p>
-                    
+
                 </div>
             </section>
 

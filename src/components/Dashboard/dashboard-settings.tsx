@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import { FileText, Sparkles, UserCircle } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
 import api from "@/api/api";
 import { useAppSelector } from "@/store/hooks";
 
@@ -14,29 +10,23 @@ export default function DashboardSettings() {
     const [userName, setUserName] = useState("");
     const [resumesCount, setResumesCount] = useState(0);
 
-    const [jdData, setJDData ] = useState([])
 
-    const user = useAppSelector( (state) => state.auth.user )
+    const user = useAppSelector((state) => state.auth.user)
 
     //functions
-    const handleSaveProfile = async() => {
-        
-    }
+
 
     useEffect(() => {
         const loadInitialData = async () => {
             try {
                 const userRes = user;
-                setUserName( userRes.name );
-                setUserEmail( userRes.email );
+                setUserName(userRes.name);
+                setUserEmail(userRes.email);
                 const resumeRes = await api.get("/resume/");
                 if (resumeRes.success && resumeRes.resumes) {
                     setResumesCount(resumeRes.resumes.length);
                 }
-                const jds = await api.get( "/jd" );
-                if( jds.success && jds.data ) {
-                    setJDData( jds.data );
-                }
+
             } catch (err) {
                 console.error("Error loading account data:", err);
             }
@@ -45,15 +35,7 @@ export default function DashboardSettings() {
     }, []);
 
 
-    const SettingRow = ({ title, description, checked, onCheckedChange }: any) => (
-        <div className="flex items-center justify-between gap-6 rounded-lg border border-slate-200 bg-white p-4">
-            <div>
-                <p className="font-semibold text-slate-950">{title}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p>
-            </div>
-            <Switch checked={checked} onCheckedChange={onCheckedChange} className="data-[state=checked]:bg-cyan-600" />
-        </div>
-    );
+
 
     return (
         <div className="p-8 w-full max-w-[1180px] pb-12">
@@ -66,7 +48,7 @@ export default function DashboardSettings() {
 
             <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
                 <CardHeader className="flex flex-row justify-between items-center gap-3">
-                    <div className="flex flex-row justify-center items-center gap-2"> 
+                    <div className="flex flex-row justify-center items-center gap-2">
                         <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
                             <UserCircle className="h-5 w-5" />
                         </div>
@@ -77,19 +59,19 @@ export default function DashboardSettings() {
                 <CardContent className="grid gap-4 md:grid-cols-2">
                     <div className="rounded-lg flex flex-col border border-slate-200 bg-slate-50 p-4">
                         <label htmlFor="name" className="text-xs font-semibold uppercase text-slate-400">Name</label>
-                        <input name="name" type="text" value={userName || "Alex"} 
-                            onChange={ (e) => {
+                        <input name="name" type="text" value={userName || "Alex"}
+                            onChange={(e) => {
                                 e.preventDefault();
-                                setUserName( e.target.value )
+                                setUserName(e.target.value)
                             }}
                             className="mt-1 text-base font-medium text-slate-950"></input>
                     </div>
                     <div className="rounded-lg border flex flex-col border-slate-200 bg-slate-50 p-4">
                         <label htmlFor="email" className="text-xs font-semibold uppercase text-slate-400">Email Address</label>
-                        <input type="email" name="email" value={userEmail || "alex@example.com"} 
-                            onChange={ (e) => {
+                        <input type="email" name="email" value={userEmail || "alex@example.com"}
+                            onChange={(e) => {
                                 e.preventDefault();
-                                setUserEmail( e.target.value )
+                                setUserEmail(e.target.value)
                             }}
                             className="mt-1 text-base font-medium text-slate-950"></input>
                     </div>

@@ -4,10 +4,7 @@ import {
   LayoutDashboard,
   UserCircle,
   Brain,
-  FileEdit,
-  LineChart,
-  Settings,
-  HelpCircle
+  FileEdit
 } from "lucide-react"
 
 import {
@@ -23,9 +20,6 @@ import {
   SidebarGroupContent,
 } from "@/components/ui/sidebar"
 import { Button } from "./ui/button"
-import { useDispatch } from "react-redux"
-import { useAppSelector } from "@/store/hooks"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import api from "@/api/api"
 import { toast } from "sonner"
 
@@ -36,7 +30,7 @@ const data = {
     { title: "AI Workspace", url: "/dashboard/ai", icon: Brain },
     { title: "Resume Editor", url: "/dashboard/resume", icon: FileEdit },
   ],
-  navFooter : [
+  navFooter: [
     // { title : "Settings", url: "/dashboard/settings", icon: Settings },
     // { title : "Support", url: "/dashboard/support", icon: HelpCircle }
   ]
@@ -46,11 +40,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const navigate = useNavigate()
 
-  const handleLogout = async() => {
-    const logout = await api.post('/auth/logout' )
-    if( logout.success ) {
-      toast.success( "Log out successful" );
-      navigate("/" );
+  const handleLogout = async () => {
+    const logout = await api.post('/auth/logout')
+    if (logout.success) {
+      toast.success("Log out successful");
+      navigate("/");
     }
   }
 
@@ -62,7 +56,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <p className="mt-1 font-['Inter'] text-xs font-semibold uppercase text-slate-500">Career OS</p>
         </Link>
       </SidebarHeader>
-      
+
       <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -86,12 +80,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter className="mt-auto border-t border-slate-200 px-4 pb-6 pt-6">
-            <Button 
-            onClick={ () => {
-              handleLogout()
-            }}
-            className="bg-red-600 text-white font-[Satoshi] font-bold  hover:bg-red-800"> Logout </Button>
-        
+        <Button
+          onClick={() => {
+            handleLogout()
+          }}
+          className="bg-red-600 text-white font-[Satoshi] font-bold  hover:bg-red-800"> Logout </Button>
+
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

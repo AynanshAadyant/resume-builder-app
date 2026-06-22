@@ -6,14 +6,11 @@ import {
     FileText,
     Radar,
     Trophy,
-    Sparkles,
-    Eye,
-    Copy
+    Eye
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import api from "@/api/api"
 import { useNavigate, Link } from "react-router"
-import { toast } from "sonner"
 import { useAppSelector } from "@/store/hooks"
 
 export default function MainContent() {
@@ -49,7 +46,7 @@ export default function MainContent() {
                 const jdsRes = await api.get("/jd");
                 if (jdsRes.success && jdsRes.data) {
                     setJdsCount(jdsRes.data.length);
-                    setJDs( jdsRes.data );
+                    setJDs(jdsRes.data);
                 }
             } catch (err) {
                 console.error("Error fetching dashboard data", err);
@@ -142,7 +139,7 @@ export default function MainContent() {
         );
     };
 
-    if( loading ) {
+    if (loading) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-[#f6f8fb]">
                 <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-cyan-500" />
@@ -170,7 +167,7 @@ export default function MainContent() {
                 </div>
             </section>
 
-           <section className="w-full flex flex-row gap-5">
+            <section className="w-full flex flex-row gap-5">
                 <div className="w-2/3 flex flex-col gap-5">
                     <div className="col-span-12 grid gap-4 md:col-span-8 md:grid-cols-3">
                         {performanceCards.map((card) => (
@@ -181,11 +178,11 @@ export default function MainContent() {
                         <div className="col-span-12 md:col-span-8">
                             <div className="mb-4 flex items-center justify-between">
                                 <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">Recent Resumes</h3>
-                                <a 
-                                onClick={ () => {
-                                    navigate("/dashboard/resume" )
-                                }}
-                                className="cursor-pointer text-xs font-semibold uppercase text-cyan-700 hover:underline">View All</a>
+                                <a
+                                    onClick={() => {
+                                        navigate("/dashboard/resume")
+                                    }}
+                                    className="cursor-pointer text-xs font-semibold uppercase text-cyan-700 hover:underline">View All</a>
                             </div>
                             <div className="space-y-3">
                                 {loading ? (
@@ -236,7 +233,7 @@ export default function MainContent() {
                                 )}
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
 
                 <div className="jds w-1/3">
@@ -300,9 +297,9 @@ export default function MainContent() {
                         )}
                     </div>
                 </div>
-           </section>
+            </section>
 
-            
+
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { ArrowRight, Brain, ClipboardCheck, FileText, Gauge, Layers3, ScanSearch } from "lucide-react"
+import { Brain, ClipboardCheck, FileText, Gauge, Layers3, ScanSearch } from "lucide-react"
 
 export default function Content() {
     const cardData = [
