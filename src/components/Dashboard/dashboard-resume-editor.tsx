@@ -24,21 +24,18 @@ interface ResumeCardProps {
 }
 
 function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: ResumeCardProps) {
-    console.log( resume );
     const targetRole = resume.role || "Role Resume";
     const targetCompany = resume.company || "Target Company";
-    console.log( resume.createdAt );
     const createdAt = resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : "recently";
+    const ats = resume?.ats.toString() ?? 'N/A';
 
     return (
         <div key={resume._id || idx} className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
-            <div className="mb-6 flex items-start justify-between">
+            <div className="mb-6 flex flex-row items-center justify-between">
                 <div className="rounded-lg bg-cyan-50 p-2 text-cyan-700">
                     <FileText className="h-5 w-5" />
                 </div>
-                <span className="rounded-lg bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
-                    Ready
-                </span>
+                <p> ATS : {ats} </p>
             </div>
 
             <div className="mb-6">
@@ -193,8 +190,17 @@ export default function ResumeEditor() {
         fileName : "resume"
     })
 
+    if( loading ) {
+        
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#f6f8fb]">
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-cyan-500" />
+            </div>
+        );
+    }
+
     return (
-        <div className="mx-auto w-full max-w-[1180px] pb-12">
+        <div className="p-8 w-full max-w-[1180px] pb-12">
             <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <div>
                     <h2 className="font-['Satoshi'] text-3xl font-bold text-slate-950">Resume Library</h2>
@@ -210,15 +216,8 @@ export default function ResumeEditor() {
                 </Button>
             </div>
 
+                
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {!loading && resumes.length > 0 ? resumes.map((resume: any, idx: number) =>
-                    <ResumeCard key={resume._id || idx} resume={resume} idx={idx} handleDeleteResume={handleDeleteResume} loadViewingResume={loadViewingResume} />
-                ) : !loading && (
-                    <div className="rounded-lg border border-slate-200 bg-white py-12 text-center text-sm text-slate-500 md:col-span-2 lg:col-span-3">
-                        No resumes found. Generate your first tailored resume.
-                    </div>
-                )}
-
                 <button onClick={handleGenerateResume} className="group flex min-h-64 flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-slate-300 bg-white p-6 transition-colors hover:border-cyan-300 hover:bg-cyan-50/50">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 transition-colors group-hover:bg-white">
                         <PlusCircle className="h-6 w-6 text-slate-500 transition-colors group-hover:text-cyan-700" />
@@ -228,6 +227,14 @@ export default function ResumeEditor() {
                         <span className="text-sm text-slate-500">Tailor metrics for a new job description</span>
                     </div>
                 </button>
+
+                {!loading && resumes.length > 0 ? resumes.map((resume: any, idx: number) =>
+                    <ResumeCard key={resume._id || idx} resume={resume} idx={idx} handleDeleteResume={handleDeleteResume} loadViewingResume={loadViewingResume} />
+                ) : !loading && (
+                    <div className="rounded-lg border border-slate-200 bg-white py-12 text-center text-sm text-slate-500 md:col-span-2 lg:col-span-3">
+                        No resumes found. Generate your first tailored resume.
+                    </div>
+                )}
             </div>
 
             {isModalOpen && (

@@ -55,6 +55,10 @@ export default function SignupForm({
       toast.error("All fields are required");
       return false;
     }
+
+    if( form.password.length < 0 ) {
+      toast.error( "Password must be 8 characters" );
+    }
     return true;
   }
 

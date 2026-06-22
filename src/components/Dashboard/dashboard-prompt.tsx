@@ -94,7 +94,7 @@ function ResumeErrorMessage() {
 
 function DefaultResumeMessage() {
     return(
-        <div className="relative z-10 max-w-xl flex items-center justify-center w-full h-auto">
+        <div className="relative z-10 max-w-xl w-full">
             <div className="bg-[var(--surface-container-low)]/70 backdrop-blur-xl border border-white/10 rounded-3xl p-12 text-center shadow-2xl">
 
                 <div className="w-20 h-20 rounded-3xl bg-[var(--secondary)]/10 border border-[var(--secondary)]/20 flex items-center justify-center mx-auto mb-8">
@@ -204,14 +204,14 @@ export default function AIWorkspace() {
     })
 
     return(
-        <div className="ai-workspace-clean flex h-[calc(100vh-4rem)] overflow-hidden text-white">
+        <div className="ai-workspace-clean flex h-[calc(100vh-4rem)] m-8 overflow-hidden text-white">
             {/* Left Panel: JD Intelligence */}
-            <aside className="w-1/3 pl-8 pt-2 min-w-[400px] border-r border-white/5 bg-[var(--surface-container-low)] overflow-y-auto flex flex-col relative z-10">
+            <aside className="w-1/3 min-w-[400px] border-r border-white/5 bg-[var(--surface-container-low)] overflow-y-auto flex flex-col relative z-10">
                 <div className="p-6 border-b border-white/5 sticky top-0 bg-[var(--surface-container-low)]/90 backdrop-blur z-20">
                     <div className="flex flex-col gap-4 mb-2">
                         <div>
                             <p className="font-semibold text-xs tracking-widest uppercase text-[var(--secondary)] mb-1">Target Role Analysis</p>
-                            <h1 className="font-['Satoshi'] text-black text-3xl font-bold ">AI Job Parser</h1>
+                            <h3 className="font-['Satoshi'] text-2xl font-bold text-[var(--on-surface)]">AI Job Parser</h3>
                         </div>
                         <textarea 
                             className="w-full h-32 bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors"
@@ -376,12 +376,12 @@ export default function AIWorkspace() {
             </aside>
 
             {/* Right Panel: Resume Studio */}
-            <main className="flex-1 overflow-auto ">                
+            <main className="flex-1 overflow-auto p-8">                
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-[var(--secondary)]/10 blur-3xl rounded-full" />
                     <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-cyan-500/5 blur-3xl rounded-full" />
                 </div>
-                <div className="rights h-[calc(100vh-80px)] flex flex-col justify-center items-center overflow-y-auto overflow-x-auto">
+                <div className="rights h-[calc(100vh-80px)] overflow-y-auto overflow-x-auto">
                     {
                         resumeError
                         ?

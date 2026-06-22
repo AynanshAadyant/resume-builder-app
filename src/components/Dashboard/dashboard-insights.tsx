@@ -46,36 +46,32 @@ export default function Insights() {
 
                 const jdsRes = await api.get("/jd");
                 if (jdsRes.success && jdsRes.data) {
+                    console.log( jdsRes.data )
                     const extractedKeywords: string[] = [];
                     jdsRes.data.forEach((jd: any) => {
+                        console.log( jd.parsedText.skills )
                         if (jd.parsedText && Array.isArray(jd.parsedText.skills)) {
-                            extractedKeywords.push(...jd.parsedText.skills);
-                        } else if (jd.skills && Array.isArray(jd.skills)) {
-                            extractedKeywords.push(...jd.skills);
+                            extractedKeywords.push(...jd.parsedText.skills.required);
                         }
                     });
-
-                    if (extractedKeywords.length > 0) {
-                        const uniqueKeywords = Array.from(new Set(
-                            extractedKeywords.map(k => k.trim()).filter(Boolean)
-                        ));
-                        if (uniqueKeywords.length > 3) {
-                            setKeywords(uniqueKeywords.slice(0, 15));
-                        }
-                    }
+                    setKeywords( extractedKeywords )
                 }
                 console.log( keywords );
 
                 const resumes = await api.get( '/resume/' )
                 if( resumes.success && resumes.resumes ) {
                     const allResumes = resumes.resumes;
+                    console.log( allResumes )
                     const extractedSkills : string[] = [];
                     let totalATS = 0;
                     allResumes.forEach( (resume:any) => {
-                        if( resume.skills && Array.isArray( resume.skills ) )
-                            extractedSkills.push( ...resume.skills )
-                        totalATS = totalATS + resume.ats;
-                        console.log(resume.ats );
+                        if (resume.skills && Array.isArray(resume.skills)) {
+                            resume.skills.forEach((skillCategory: any) => {
+                                if (Array.isArray(skillCategory.values)) {
+                                    extractedSkills.push(...skillCategory.values);
+                                }
+                            });
+                        }
                     })
                     console.log( totalATS )
                     const avg = totalATS / allResumes.length;
@@ -156,8 +152,25 @@ export default function Insights() {
                         <p className="ml-3 text-sm font-bold text-emerald-700">14 Leads</p>
                     </div>
                 </div>
+                
+                <div className="strong-skills col-span-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
+                    <h4 className="font-['Satoshi'] text-xl font-bold text-slate-950">Strong Points : </h4>
+                    <p className="mt-2 text-sm text-slate-500">Top skills showing up your resumes :</p>
+                   
+                    <div className="mt-6 space-y-2 flex flex-wrap gap-3">
+                        {
+                            skills.length > 0 
+                            ?
+                            skills.map( (keyword, index ) => 
+                                <KeywordPill keyword={keyword} index={index}/>
+                            )
+                            :
+                            <p> Generate Resumes to see skills</p>
+                        }    
+                    </div>
+                </div>
 
-                <div className="ats-trend col-span-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:col-span-8">
+                <div className="ats-trend-chart col-span-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:col-span-8">
                     <div className="mb-10 flex items-center justify-between">
                         <h4 className="font-['Satoshi'] text-xl font-bold text-slate-950">ATS Score Trends</h4>
                         <div className="flex gap-4">
@@ -186,33 +199,7 @@ export default function Insights() {
                     </div>
                 </div>
 
-                <div className="on-demand-skills col-span-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
-                    <h4 className="font-['Satoshi'] text-xl font-bold text-slate-950">Market Demand</h4>
-                    <p className="mt-2 text-sm text-slate-500">Top skills showing up in analyzed job descriptions.</p>
-                   
-                    <div className="mt-6 space-y-2 flex flex-wrap gap-3">
-                        {
-                            keywords.map( (keyword, index ) => 
-                                <KeywordPill keyword={keyword} index={index}/>
-                            )
-                        }
-                        
-                        
-                    </div>
-                </div>
-
-                <div className="strong-skills col-span-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
-                    <h4 className="font-['Satoshi'] text-xl font-bold text-slate-950">Strong Points : </h4>
-                    <p className="mt-2 text-sm text-slate-500">Top skills showing up your resumes :</p>
-                   
-                    <div className="mt-6 space-y-2 flex flex-wrap gap-3">
-                        {
-                            skills.map( (keyword, index ) => 
-                                <KeywordPill keyword={keyword} index={index}/>
-                            )
-                        }    
-                    </div>
-                </div>
+                
             </div>
         </div>
     )

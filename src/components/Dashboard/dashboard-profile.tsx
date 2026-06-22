@@ -204,7 +204,7 @@ export default function ProfileBuilder() {
     };
 
     return (
-        <div className="profile-builder-clean max-w-[1000px] mx-auto pb-24 text-white">
+        <div className="profile-builder-clean max-w-[1000px] p-8 pb-24 text-white">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                 <div>
@@ -221,7 +221,7 @@ export default function ProfileBuilder() {
                 </Button>
             </div>
 
-            <main className="bg-[var(--surface-container-low)] border border-white/5 rounded-xl px-10 py-5">
+            <main className="bg-[var(--surface-container-low)] w-[1000px] border border-white/5 rounded-xl px-10 py-5">
                 <Tabs defaultValue="basic" className="w-full">
                     <div className="border-b border-white/5 mb-8">
                         <TabsList className="w-auto h-auto p-0 flex flex-row bg-gray-200 items-center justify-center overflow-y-visible ">
@@ -322,9 +322,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={edu.institution} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].institution = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation(prev =>
+                                                    prev.map((item, i) =>
+                                                        i === idx
+                                                            ? { ...item, institution: e.target.value }
+                                                            : item
+                                                    )
+                                                );
                                             }}
                                         />
                                     </div>
@@ -335,9 +339,15 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={edu.degree} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].degree = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( (item, i ) => 
+                                                        i===idx ? 
+                                                        { ...item, degree : e.target.value}
+                                                        : 
+                                                        item
+                                                    )
+                                                );
+
                                             }}
                                         />
                                     </div>
@@ -348,9 +358,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={edu.fieldOfStudy} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].fieldOfStudy = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, fieldOfStudy : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -361,9 +375,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={edu.location} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].location = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, location : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -374,9 +392,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(edu.startDate)} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].startDate = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, startDate : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -387,9 +409,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(edu.endDate)} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].endDate = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, endDate : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -401,9 +427,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={edu.cgpa} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].cgpa = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, cgpa : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -414,9 +444,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={edu.content || ""} 
                                             onChange={(e) => {
-                                                const newEdu = [...education];
-                                                newEdu[idx].content = e.target.value;
-                                                setEducation(newEdu);
+                                                setEducation( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, content : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -453,9 +487,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={work.company} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].company = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, company : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -466,9 +504,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={work.position} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].position = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, position : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -479,21 +521,29 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={work.location} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].location = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, location : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <label className="text-xs text-[var(--on-surface-variant)]">Job Type</label>
                                         <select 
-                                            className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
+                                            className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-black " 
                                             value={work.type} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].type = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, type : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         >
                                             <option value="full-time">Full-Time</option>
@@ -511,9 +561,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(work.startDate)} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].startDate = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, startDate : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -524,9 +578,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(work.endDate)} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].endDate = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, endDate : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -537,9 +595,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={work.responsibilities} 
                                             onChange={(e) => {
-                                                const newWork = [...workExperiences];
-                                                newWork[idx].responsibilities = e.target.value;
-                                                setWorkExperiences(newWork);
+                                                setWorkExperiences( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, responsibilities : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                             placeholder="Write bullet points or descriptions of responsibilities..."
                                         />
@@ -577,9 +639,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={proj.title} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].title = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, title : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -590,9 +656,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={Array.isArray(proj.tech_stack) ? proj.tech_stack.join(", ") : proj.tech_stack} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].tech_stack = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, tech_stack : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                             placeholder="React, Express, MongoDB"
                                         />
@@ -604,9 +674,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={proj.github_link || ""} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].github_link = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, github_link : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -617,9 +691,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={proj.live_link || ""} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].live_link = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, live_link : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -630,9 +708,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={proj.description} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].description = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, description : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -643,9 +725,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={proj.features} 
                                             onChange={(e) => {
-                                                const newProj = [...projects];
-                                                newProj[idx].features = e.target.value;
-                                                setProjects(newProj);
+                                                setProjects( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, features : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -682,9 +768,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={skill.category} 
                                             onChange={(e) => {
-                                                const newSkills = [...skills];
-                                                newSkills[idx].category = e.target.value;
-                                                setSkills(newSkills);
+                                                setSkills( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, category : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                             placeholder="Languages, Libraries, Tools"
                                         />
@@ -696,9 +786,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={skill.name} 
                                             onChange={(e) => {
-                                                const newSkills = [...skills];
-                                                newSkills[idx].name = e.target.value;
-                                                setSkills(newSkills);
+                                                setSkills( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, name : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                             placeholder="JavaScript, TypeScript, Python"
                                         />
@@ -736,9 +830,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={cert.title} 
                                             onChange={(e) => {
-                                                const newCerts = [...certifications];
-                                                newCerts[idx].title = e.target.value;
-                                                setCertifications(newCerts);
+                                                setCertifications( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, title : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -749,9 +847,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={cert.issuer} 
                                             onChange={(e) => {
-                                                const newCerts = [...certifications];
-                                                newCerts[idx].issuer = e.target.value;
-                                                setCertifications(newCerts);
+                                                setCertifications( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, issuer : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -762,9 +864,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(cert.issueDate)} 
                                             onChange={(e) => {
-                                                const newCerts = [...certifications];
-                                                newCerts[idx].issueDate = e.target.value;
-                                                setCertifications(newCerts);
+                                                setCertifications( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, issueDate : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -775,9 +881,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={cert.url || ""} 
                                             onChange={(e) => {
-                                                const newCerts = [...certifications];
-                                                newCerts[idx].url = e.target.value;
-                                                setCertifications(newCerts);
+                                                setCertifications( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, url : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -814,9 +924,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={ach.title} 
                                             onChange={(e) => {
-                                                const newAchs = [...achievements];
-                                                newAchs[idx].title = e.target.value;
-                                                setAchievements(newAchs);
+                                                setAchievements( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, title : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -827,9 +941,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={formatDateForInput(ach.issue_date)} 
                                             onChange={(e) => {
-                                                const newAchs = [...achievements];
-                                                newAchs[idx].issue_date = e.target.value;
-                                                setAchievements(newAchs);
+                                                setAchievements( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, issue_date : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -840,9 +958,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={ach.url || ""} 
                                             onChange={(e) => {
-                                                const newAchs = [...achievements];
-                                                newAchs[idx].url = e.target.value;
-                                                setAchievements(newAchs);
+                                                setAchievements( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, url : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -853,9 +975,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={ach.description} 
                                             onChange={(e) => {
-                                                const newAchs = [...achievements];
-                                                newAchs[idx].description = e.target.value;
-                                                setAchievements(newAchs);
+                                                setAchievements( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, description : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>
@@ -892,9 +1018,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white" 
                                             value={misc.name} 
                                             onChange={(e) => {
-                                                const newMisc = [...miscellaneous];
-                                                newMisc[idx].name = e.target.value;
-                                                setMiscellaneous(newMisc);
+                                                setMiscellaneous( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, name : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                             placeholder="Languages Spoken, Interests, Extra Curriculars"
                                         />
@@ -906,9 +1036,13 @@ export default function ProfileBuilder() {
                                             className="bg-[var(--surface-container-low)] border border-white/10 rounded-lg p-2.5 text-sm text-white resize-none" 
                                             value={misc.description || ""} 
                                             onChange={(e) => {
-                                                const newMisc = [...miscellaneous];
-                                                newMisc[idx].description = e.target.value;
-                                                setMiscellaneous(newMisc);
+                                                setMiscellaneous( prev => 
+                                                    prev.map( ( item, i ) => 
+                                                        i === idx ? 
+                                                            { ...item, description : e.target.value}
+                                                        :
+                                                            item
+                                                    ))
                                             }}
                                         />
                                     </div>

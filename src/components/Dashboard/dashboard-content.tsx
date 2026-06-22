@@ -23,6 +23,7 @@ export default function MainContent() {
 
     const [resumesCount, setResumesCount] = useState(0);
     const [jdsCount, setJdsCount] = useState(0);
+    const [jds, setJDs] = useState<any[]>([])
     const [avgAtsScore, setAvgAtsScore] = useState(85);
     const [resumes, setResumes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ export default function MainContent() {
                 const jdsRes = await api.get("/jd");
                 if (jdsRes.success && jdsRes.data) {
                     setJdsCount(jdsRes.data.length);
+                    setJDs( jdsRes.data );
                 }
             } catch (err) {
                 console.error("Error fetching dashboard data", err);
@@ -140,8 +142,15 @@ export default function MainContent() {
         );
     };
 
+    if( loading ) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#f6f8fb]">
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-cyan-500" />
+            </div>
+        );
+    }
     return (
-        <div className="mx-auto w-full max-w-[1180px] space-y-8 pb-12">
+        <div className="p-8 w-full max-w-[1180px] space-y-8 pb-12">
             <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div>
                     <h2 className="font-['Satoshi'] text-3xl font-bold text-slate-950">Dashboard</h2>
@@ -161,70 +170,139 @@ export default function MainContent() {
                 </div>
             </section>
 
-            <div className="grid grid-cols-12 gap-5">
-                <div className="col-span-12 grid gap-4 md:col-span-8 md:grid-cols-3">
-                    {performanceCards.map((card) => (
-                        <StatCard key={card.id} {...card} />
-                    ))}
-                </div>
-            </div>
+           <section className="w-full flex flex-row gap-5">
+                <div className="w-2/3 flex flex-col gap-5">
+                    <div className="col-span-12 grid gap-4 md:col-span-8 md:grid-cols-3">
+                        {performanceCards.map((card) => (
+                            <StatCard key={card.id} {...card} />
+                        ))}
+                    </div>
+                    <div className="resumes w-full gap-5">
+                        <div className="col-span-12 md:col-span-8">
+                            <div className="mb-4 flex items-center justify-between">
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">Recent Resumes</h3>
+                                <a 
+                                onClick={ () => {
+                                    navigate("/dashboard/resume" )
+                                }}
+                                className="cursor-pointer text-xs font-semibold uppercase text-cyan-700 hover:underline">View All</a>
+                            </div>
+                            <div className="space-y-3">
+                                {loading ? (
+                                    <div className="rounded-lg border border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
+                                        Loading resumes...
+                                    </div>
+                                ) : resumes.length > 0 ? (
+                                    resumes.slice(0, 3).map((resume: any, index: number) => {
+                                        const targetRole = (resume.workExp && resume.workExp[0] && resume.workExp[0].post) || "Software Engineer";
+                                        const targetCompany = (resume.workExp && resume.workExp[0] && resume.workExp[0].organisation) || "Target Company";
+                                        const score = resume.ats || 0;
+                                        const createdAt = resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : "recently";
 
-            <div className="grid grid-cols-12 gap-5">
-                <div className="col-span-12 md:col-span-8">
-                    <div className="mb-4 flex items-center justify-between">
-                        <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">Recent Resumes</h3>
-                        <a className="cursor-pointer text-xs font-semibold uppercase text-cyan-700 hover:underline">View All</a>
+                                        return (
+                                            <div key={resume._id || index} className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-cyan-200">
+                                                <div className="flex items-center gap-6">
+                                                    <div className="relative flex h-16 w-12 items-center justify-center rounded border border-slate-200 bg-slate-50 shadow-sm">
+                                                        <span className="text-center font-['IBM_Plex_Serif'] text-[8px] leading-tight text-slate-400">
+                                                            RESUME<br />v{index + 1}.0
+                                                        </span>
+                                                        <div className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-emerald-500"></div>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-['Inter'] text-base font-semibold text-slate-950">{targetRole}</h4>
+                                                        <p className="font-['Inter'] text-sm text-slate-500">
+                                                            Target: {targetCompany} | Optimized {createdAt}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-6">
+                                                    <div className="text-center">
+                                                        <span className="mb-1 block font-['Satoshi'] text-2xl font-bold leading-none text-emerald-700">{score}</span>
+                                                        <span className="text-[10px] font-semibold uppercase text-slate-400">ATS Score</span>
+                                                    </div>
+                                                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                                        <button onClick={() => navigate("/dashboard/resume")} className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-950">
+                                                            <Eye className="h-5 w-5" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="rounded-lg border border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
+                                        No resumes generated yet. Go to <Link to="/dashboard/resume" className="text-cyan-700 hover:underline">Resume Editor</Link> to create one.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+
+                <div className="jds w-1/3">
+                    <div className="px-4 mb-4 flex items-center justify-between">
+                        <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">
+                            Recent JDs
+                        </h3>
+                        <span className="text-xs font-semibold uppercase text-cyan-700">
+                            {jds.length} Total
+                        </span>
                     </div>
                     <div className="space-y-3">
-                        {loading ? (
-                            <div className="rounded-lg border border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
-                                Loading resumes...
-                            </div>
-                        ) : resumes.length > 0 ? (
-                            resumes.slice(0, 3).map((resume: any, index: number) => {
-                                const targetRole = (resume.workExp && resume.workExp[0] && resume.workExp[0].post) || "Software Engineer";
-                                const targetCompany = (resume.workExp && resume.workExp[0] && resume.workExp[0].organisation) || "Target Company";
-                                const score = resume.ats || 0;
-                                const createdAt = resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : "recently";
+                        {jds.length > 0 ? (
+                            jds.slice(0, 5).map((jd, index) => {
+                                const company =
+                                    jd?.parsedText?.metadata?.company || "Unknown Company";
+
+                                const jobTitle =
+                                    jd?.parsedText?.metadata?.jobTitle || "Unknown Role";
+
+                                const skills =
+                                    jd?.parsedText?.skills?.required?.length || 0;
 
                                 return (
-                                    <div key={resume._id || index} className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-cyan-200">
-                                        <div className="flex items-center gap-6">
-                                            <div className="relative flex h-16 w-12 items-center justify-center rounded border border-slate-200 bg-slate-50 shadow-sm">
-                                                <span className="text-center font-['IBM_Plex_Serif'] text-[8px] leading-tight text-slate-400">
-                                                    RESUME<br />v{index + 1}.0
-                                                </span>
-                                                <div className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-                                            </div>
+                                    <div
+                                        key={index}
+                                        className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-cyan-200 hover:shadow-md"
+                                    >
+                                        <div className="flex items-start justify-between">
                                             <div>
-                                                <h4 className="font-['Inter'] text-base font-semibold text-slate-950">{targetRole}</h4>
-                                                <p className="font-['Inter'] text-sm text-slate-500">
-                                                    Target: {targetCompany} | Optimized {createdAt}
+                                                <h4 className="font-['Inter'] text-base font-semibold text-slate-950">
+                                                    {jobTitle}
+                                                </h4>
+
+                                                <p className="mt-1 text-sm text-slate-500">
+                                                    {company}
                                                 </p>
                                             </div>
+
+                                            <div className="rounded-lg bg-cyan-50 px-2 py-1 text-xs font-semibold text-cyan-700">
+                                                JD #{index + 1}
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-6">
-                                            <div className="text-center">
-                                                <span className="mb-1 block font-['Satoshi'] text-2xl font-bold leading-none text-emerald-700">{score}</span>
-                                                <span className="text-[10px] font-semibold uppercase text-slate-400">ATS Score</span>
-                                            </div>
-                                            <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                                <button onClick={() => navigate("/dashboard/resume")} className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-950">
-                                                    <Eye className="h-5 w-5" />
-                                                </button>
-                                            </div>
+
+                                        <div className="mt-3 flex items-center justify-between">
+                                            <span className="text-xs text-slate-400">
+                                                {skills} skills detected
+                                            </span>
+
+                                            <button className="opacity-0 transition-opacity group-hover:opacity-100">
+                                                <Eye className="h-4 w-4 text-slate-500 hover:text-slate-950" />
+                                            </button>
                                         </div>
                                     </div>
                                 );
                             })
                         ) : (
                             <div className="rounded-lg border border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
-                                No resumes generated yet. Go to <Link to="/dashboard/resume" className="text-cyan-700 hover:underline">Resume Editor</Link> to create one.
+                                No JDs analyzed yet.
                             </div>
                         )}
                     </div>
                 </div>
-            </div>
+           </section>
+
+            
         </div>
     )
 }

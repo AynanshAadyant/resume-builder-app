@@ -44,9 +44,9 @@ const CATEGORIES = [
 
 export default function DashboardSupport() {
     return (
-        <div className="mx-auto w-full max-w-[1180px] pb-12">
-            <section className="mb-8 grid gap-5 lg:grid-cols-[1fr_0.42fr]">
-                <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="p-8 w-full max-w-[1180px] pb-12">
+            <section className="mb-8 gap-5 lg:grid-cols-[1fr_0.42fr]">
+                <div className="w-full rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                     <div className="mb-4 inline-flex items-center gap-2 rounded-lg bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-700">
                         <Sparkles className="h-4 w-4" />
                         Knowledge Base
@@ -57,28 +57,8 @@ export default function DashboardSupport() {
                     <p className="mt-4 max-w-2xl text-base leading-7 text-slate-500">
                         Search guidance for profile setup, job description analysis, resume generation, exports, and account questions.
                     </p>
-                    <div className="relative mt-6 max-w-xl">
-                        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-                        <input
-                            placeholder="Search help articles..."
-                            className="h-12 w-full rounded-lg border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-slate-950 placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white focus:outline-none"
-                        />
-                    </div>
+                    
                 </div>
-
-                <Card className="rounded-lg border-cyan-100 bg-cyan-50/70 p-6 shadow-sm">
-                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-white text-cyan-700">
-                        <LifeBuoy className="h-5 w-5" />
-                    </div>
-                    <h2 className="font-['Satoshi'] text-xl font-bold text-slate-950">Need direct help?</h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Ask the AI assistant for formatting, profile, and export help based on your current workflow.
-                    </p>
-                    <Button className="mt-6 w-full rounded-lg bg-slate-950 text-white hover:bg-slate-800">
-                        <Bot className="h-4 w-4" />
-                        Contact AI Support
-                    </Button>
-                </Card>
             </section>
 
             <section className="mb-8 grid gap-5 md:grid-cols-3">

@@ -8,18 +8,19 @@ import type { Achievement } from "./achievement.type";
 import type { Miscellaneous } from "./miscellaneous.type";
 
 export interface Resume {
-    _id?: string;
-    user?: string | User;
-    title ?: string,
-    company ?: string,
-    role ?: string,
-    profile ?: Profile,
-    workExp : WorkExperience[],
-    projects : Project[],
-    skills : Skill[],
-    education : Education[],
-    certifications : Certification[],
-    achievements : Achievement[],
-    extra : any[],
-    createdAt ?: any
+    _id?: any;
+    user?: String | User;
+    title ?: String;
+    company ?: String;
+    role ?: String;
+    profile ?: Profile;
+    workExp : WorkExperience[];
+    projects : Project[];
+    skills : Skill[];
+    education : Education[];
+    certifications : Certification[];
+    achievements : Achievement[];
+    extra : any[];
+    createdAt ?: any;
+    ats : Number | String;
 }

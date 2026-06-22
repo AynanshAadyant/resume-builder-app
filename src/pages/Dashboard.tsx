@@ -21,7 +21,7 @@ export default function Dashboard() {
                     />
                     <Navigation />
                 </header>
-                <div className="flex flex-1 flex-col p-4 md:p-8">
+                <div className="flex flex-1 flex-col">
                     <Outlet />
                 </div>
             </SidebarInset>

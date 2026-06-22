@@ -15,12 +15,15 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import {logout} from "../../store/slice/authSlice"
+import { useState } from "react"
 
 
 export default function Navigation() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector( (state:any) => state.auth.user )
+
+    const [ isSearching, setIsSearching ] =useState<boolean>(false)
 
     const handleLogout = async() => {
         try{
@@ -51,17 +54,7 @@ export default function Navigation() {
                 </div>
             </div>
             
-            <div className="flex items-center gap-2 md:gap-3">
-                <button className="message-icon rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                    <MessageSquare className="w-5 h-5" />
-                </button>
-                <button className="notification-icon rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                    <Bell className="w-5 h-5" />
-                </button>
-                <Button className="ai-chat-button hidden items-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase text-cyan-700 transition-all hover:bg-cyan-100 md:flex">
-                    <Zap className="w-4 h-4" />
-                    AI Chat
-                </Button>
+            <div className="flex items-center px-10 gap-2 md:gap-3">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Avatar className="h-9 w-9 border border-slate-200">
