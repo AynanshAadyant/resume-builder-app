@@ -60,8 +60,10 @@ export default function LoginForm({
         dispatch( authenticate(response.body))
         navigate( "/dashboard" )
       }
-      else 
-        toast.error( response?.message || "Something went wrong" )
+      else {
+        console.log( response );
+        toast.error( "Something went wrong" )
+      }
       setLoading( false );
     }
     catch(e) {
