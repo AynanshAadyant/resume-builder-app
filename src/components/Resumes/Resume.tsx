@@ -4,7 +4,6 @@ import type {
     User,
 } from "@/types/user.type";
 import { forwardRef } from "react";
-import "../../styles/resume.css"
 
 interface ResumePreviewProps {
     resume: Resume;
@@ -48,9 +47,9 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
             ref={ref}
             className={`bg-gray-200 ${className}`}>
             <div className="bg-white w-[210mm] max-w-full min-h-[297mm] mx-auto shadow-lg ">
-                <div className="w-full text-black p-12 leading-relaxed text-[15px] font-serif">                
+                <div className="w-full text-black px-15 py-10 leading-relaxed text-[15px] font-serif">                
                         <header className="text-center border-b-2 border-black pb-4 mb-6">
-                            <h1 className="resume-heading">
+                            <h1 className="resume-heading text-3xl font-bold">
                                 {user?.name || "Candidate Name"}
                             </h1>
 
@@ -60,23 +59,23 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                 )}
 
                                 {profile?.phoneNo && user?.email && (
-                                    <span>|</span>
+                                    <span> | </span>
                                 )}
 
                                 {user?.email && (
-                                    <span>{user.email}</span>
+                                    <a href={`mailto:${user.email}`}>{user.email}</a>
                                 )}
 
                                 {profile?.location && (
                                     <>
-                                        <span>|</span>
+                                        <span> | </span>
                                         <span>{profile.location}</span>
                                     </>
                                 )}
 
                                 {profile?.linkedIn && (
                                     <>
-                                        <span>|</span>
+                                        <span> | </span>
                                         <a
                                             href={profile.linkedIn}
                                             target="_blank"
@@ -90,7 +89,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
 
                                 {profile?.github && (
                                     <>
-                                        <span>|</span>
+                                        <span> | </span>
                                         <a
                                             href={profile.github}
                                             target="_blank"
@@ -104,7 +103,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
 
                                 {profile?.portfolio && (
                                     <>
-                                        <span>|</span>
+                                        <span> | </span>
                                         <a
                                             href={profile.portfolio}
                                             target="_blank"
@@ -122,31 +121,31 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {resume.workExp?.length >
                         0 && (
                         <section className="flex flex-col">
-                            <h2 className="resume-heading">
+                            <h2 className="font-bold text-xl underline resume-heading mb-1">
                                 Experience
                             </h2>
 
-                            <div className="space-y-6">
+                            <div className="flex flex-col gap-4 mb-2">
                                 {resume.workExp.map( ( exp, index ) => (
                                     <div key={ exp._id ?? index }>
                                         <div className="flex flex-row justify-between items-center">
                                             <div>
-                                                <h3 className="resume-role">{exp.organisation}</h3>
+                                                <h3 className="resume-role font-bold">{exp.organisation}</h3>
 
-                                                <p className="resume-role"> {exp.post} </p>
+                                                <p className="resume-role text-gray-500"> {exp.post} </p>
                                                 
                                             </div>
 
-                                            <div className="resume-date">
-                                                { formatDate( exp.startDate)} {" - "} {formatDate( exp.endDate) ||"Present"}
-                                                <p className="text-sm text-gray-500">
-                                                    { exp.location} {" "}{" "}{exp.type}
+                                            <div className="resume-date flex flex-col">
+                                                <p>  { formatDate( exp.startDate)} {" - "} {formatDate( exp.endDate) ||"Present"} </p>
+                                                <p className="text-right text-sm text-gray-500">
+                                                    { exp.location} {exp.type || ""}
                                                 </p>
                                             </div>
                                         </div>
                                         <ul className="resume-list">
                                             {exp.contents.map((point, idx) => (
-                                                <li className="resume-list-item" key={idx}> {point}</li>
+                                                <li className="resume-list-item text-[14px]" key={idx}> - {point}</li>
                                             ))}
                                         </ul>
                                     </div>
@@ -159,12 +158,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {/* Projects */}
                     {resume.projects?.length >
                         0 && (
-                        <section className="mb-8">
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                        <section className="">
+                            <h2 className="text-xl underline font-bold mb-2">
                                 Projects
                             </h2>
 
-                            <div className="space-y-6">
+                            <div className="flex flex-col gap-1">
                                 {resume.projects.map(
                                     (
                                         project,
@@ -176,9 +175,9 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 index
                                             }
                                         >
-                                            <div className="flex justify-between items-start">
+                                            <div className="flex justify-between">
                                                 <div>
-                                                    <h3 className="font-semibold text-lg">
+                                                    <h3 className="font-semibold">
                                                         {
                                                             project.title
                                                         }
@@ -187,9 +186,9 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                     {project.techStack
                                                         ?.length >
                                                         0 && (
-                                                        <p className="text-sm text-gray-600 mt-1">
+                                                        <p className="text-sm text-gray-600">
                                                             {project.techStack.join(
-                                                                " • "
+                                                                "  |  "
                                                             )}
                                                         </p>
                                                     )}
@@ -224,26 +223,15 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 </div>
                                             </div>
 
-                                            <ul className="mt-2 list-disc ml-6 space-y-1">
+                                            <ul className="list">
                                                 {project.contents.map((point, idx) => (
-                                                    <li key={idx}>
-                                                        {point}
+                                                    <li key={idx} className="text-[14px]">
+                                                        - {point}
                                                     </li>
                                                 ))}
                                             </ul>
 
-                                            {project.features && (
-                                                <div className="mt-2">
-                                                    <span className="font-medium">
-                                                        Features:
-                                                    </span>{" "}
-                                                    {
-                                                        project.features
-                                                    }
-                                                </div>
-                                            )}
-
-                                            <p className="text-sm text-gray-500 mt-2">
+                                            <p className="text-sm text-gray-500">
                                                 {formatDate(
                                                     project.startDate
                                                 )}
@@ -262,8 +250,8 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {/* Skills */}
                     {resume.skills?.length >
                         0 && (
-                        <section className="mb-8">
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                        <section className="mb-2">
+                            <h2 className="text-xl font-bold underline">
                                 Skills
                             </h2>
                             {
@@ -272,7 +260,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                         key={skill._id ?? index}
                                         className="flex gap-2"
                                     >
-                                        <span className="font-bold min-w-[180px]">
+                                        <span className="font-bold min-w-[180px] text-[13px]">
                                             {skill.category}:
                                         </span>
 
@@ -289,12 +277,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {/* Education */}
                     {resume.education?.length >
                         0 && (
-                        <section className="mb-8">
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                        <section className="mb-2">
+                            <h2 className="text-xl font-bold underline">
                                 Education
                             </h2>
 
-                            <div className="space-y-4">
+                            <div className="">
                                 {resume.education.map(
                                     (
                                         edu,
@@ -308,7 +296,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                             className="flex justify-between"
                                         >
                                             <div>
-                                                <h1 className="institution font-bold text-lg">
+                                                <h1 className="institution font-bold ">
                                                     {
                                                         edu.institution
                                                     }
@@ -328,11 +316,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
 
                                                 
 
-                                                <p className="location text-sm text-gray-500">
-                                                    {
-                                                        edu.location
-                                                    }
-                                                </p>
+                                                
 
                                                 {edu.content && (
                                                     <p className="content mt-2">
@@ -360,6 +344,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                         edu.endDate
                                                     ).getFullYear()}
                                                 </p>
+
+                                                <p className="location text-sm text-gray-500">
+                                                    {
+                                                        edu.location
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
                                     )
@@ -371,12 +361,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {/* Certifications */}
                     {resume.certifications
                         ?.length > 0 && (
-                        <section className="mb-8">
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                        <section className="mb-2">
+                            <h2 className="text-xl font-bold underline">
                                 Certifications
                             </h2>
 
-                            <div className="space-y-4">
+                            <div className="">
                                 {resume.certifications.map(
                                     (
                                         cert,
@@ -429,8 +419,8 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {/* Achievements */}
                     {resume.achievements
                         ?.length > 0 && (
-                        <section className="mb-8">
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                        <section className="mb-2">
+                            <h2 className="text-xl font-bold underline">
                                 Achievements
                             </h2>
 
@@ -492,7 +482,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                 Information
                             </h2>
 
-                            <div className="space-y-4">
+                            <div className="">
                                 {resume.extra.map(
                                     (
                                         item,
