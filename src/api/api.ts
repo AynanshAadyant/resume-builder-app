@@ -4,7 +4,6 @@ class API {
     axiosInstance: any;
 
     constructor() {
-        console.log( import.meta.env.VITE_STATUS)
         this.axiosInstance = axios.create({
             baseURL: import.meta.env.VITE_STATUS === "PROD" ? "/api" : import.meta.env.VITE_BACKEND_URL,
             withCredentials: true,

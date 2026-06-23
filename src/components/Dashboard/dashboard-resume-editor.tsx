@@ -26,12 +26,11 @@ interface ResumeCardProps {
 function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: ResumeCardProps) {
     const targetRole = resume.role || "Role Resume";
     const targetCompany = resume.company || "Target Company";
-    const ats = resume?.ats.toString() ?? 'N/A';
+    const ats = resume?.ats?.toString() ?? 'N/A';
 
-    console.log( resume );
 
     return (
-        <div key={resume._id || idx} className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
+        <div  className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
             <div className="mb-6 flex flex-row items-center justify-between">
                 <div className="rounded-lg bg-cyan-50 p-2 text-cyan-700">
                     <FileText className="h-5 w-5" />
