@@ -29,10 +29,11 @@ export default function MainContent() {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-
+                console.log( "Fetching resumes" );
                 const resumesRes = await api.get("/resume/");
                 let fetchedResumes = [];
                 if (resumesRes.success && resumesRes.resumes) {
+                    console.log("Resumes fetched successfully" );
                     fetchedResumes = resumesRes.resumes;
                     setResumes(fetchedResumes);
                     setResumesCount(fetchedResumes.length);
