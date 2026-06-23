@@ -28,6 +28,8 @@ function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: Resu
     const targetCompany = resume.company || "Target Company";
     const ats = resume?.ats.toString() ?? 'N/A';
 
+    console.log( resume );
+
     return (
         <div key={resume._id || idx} className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
             <div className="mb-6 flex flex-row items-center justify-between">
@@ -301,7 +303,7 @@ export default function ResumeEditor() {
                         >
                             <X className="h-5 w-5" />
                         </button>
-                        <button className="fixed left-6 top-6 z-50" onClick={handleDownload}> Download </button>
+                        <button className="fixed bg-black text-white px-5 rounded left-6 top-6 z-50" onClick={handleDownload}> Download </button>
                     </div>
 
                     <ResumePreview ref={resumeRef} resume={viewingResume} profile={completeProfile?.profile} user={user} />
