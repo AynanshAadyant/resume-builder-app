@@ -102,7 +102,7 @@ export default function ResumeEditor() {
     const fetchResumes = async () => {
         try {
             setLoading(true);
-            const res = await api.get("/resume/");
+            const res = await api.get("/resume");
             if (res.success && res.resumes) {
                 setResumes(res.resumes);
             }

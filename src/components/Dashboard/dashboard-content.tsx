@@ -30,7 +30,7 @@ export default function MainContent() {
             try {
                 setLoading(true);
                 console.log( "Fetching resumes" );
-                const resumesRes = await api.get("/resume/");
+                const resumesRes = await api.get("/resume");
                 let fetchedResumes = [];
                 if (resumesRes.success && resumesRes.resumes) {
                     console.log("Resumes fetched successfully" );
