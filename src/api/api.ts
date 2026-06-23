@@ -23,7 +23,6 @@ class API {
     async get(url: string) {
         try {
             const response = await this.axiosInstance.get(url);
-            console.log( response );
             return response.data;
         } catch (error) {
             console.error(error);
