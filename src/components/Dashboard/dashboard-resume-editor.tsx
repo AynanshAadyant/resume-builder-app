@@ -18,19 +18,19 @@ import { usePrintPdf } from "@/utils/downloader"
 
 interface ResumeCardProps {
     resume: Resume,
-    idx: number,
+    idx?: number,
     handleDeleteResume?: any,
     loadViewingResume?: any
 }
 
-function ResumeCard({ resume, idx, handleDeleteResume, loadViewingResume }: ResumeCardProps) {
+function ResumeCard({ resume, handleDeleteResume, loadViewingResume }: ResumeCardProps) {
     const targetRole = resume.role || "Role Resume";
     const targetCompany = resume.company || "Target Company";
     const ats = resume?.ats?.toString() ?? 'N/A';
 
 
     return (
-        <div  className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
+        <div className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
             <div className="mb-6 flex flex-row items-center justify-between">
                 <div className="rounded-lg bg-cyan-50 p-2 text-cyan-700">
                     <FileText className="h-5 w-5" />
@@ -229,7 +229,7 @@ export default function ResumeEditor() {
                 </button>
 
                 {!loading && resumes.length > 0 ? resumes.map((resume: any, idx: number) =>
-                    <ResumeCard key={resume._id || idx} resume={resume} idx={idx} handleDeleteResume={handleDeleteResume} loadViewingResume={loadViewingResume} />
+                    <ResumeCard key={resume._id || idx} resume={resume} handleDeleteResume={handleDeleteResume} loadViewingResume={loadViewingResume} />
                 ) : !loading && (
                     <p></p>
                 )}
