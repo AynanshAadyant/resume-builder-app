@@ -17,8 +17,8 @@ export interface Resume {
     projects: Project[];
     skills: Skill[];
     education: Education[];
-    certifications: Certification[];
-    achievements: Achievement[];
+    certifications: any[];
+    achievements: any[];
     extra: any[];
     createdAt?: any;
     ats: Number | String;

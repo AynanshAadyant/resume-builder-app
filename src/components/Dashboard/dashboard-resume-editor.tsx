@@ -30,7 +30,7 @@ function ResumeCard({ resume, handleDeleteResume, loadViewingResume }: ResumeCar
 
 
     return (
-        <div className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
+        <div className="group flex flex-col justify-between py-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
             <div className="mb-6 flex flex-row items-center justify-between">
                 <div className="rounded-lg bg-cyan-50 p-2 text-cyan-700">
                     <FileText className="h-5 w-5" />
@@ -39,7 +39,7 @@ function ResumeCard({ resume, handleDeleteResume, loadViewingResume }: ResumeCar
             </div>
 
             <div className="mb-6">
-                <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950">{targetRole}</h3>
+                <h3 className="font-['Satoshi'] text-xl font-bold text-slate-950 overflow-x-hidden">{targetRole}</h3>
                 <p className="mt-2 font-['Satoshi'] flex items-center gap-2 text-xl text-slate-950">
                     <Building2 className="h-4 w-4" />
                     Target: {targetCompany}
@@ -104,7 +104,9 @@ export default function ResumeEditor() {
             setLoading(true);
             const res = await api.get("/resume");
             if (res.success && res.resumes) {
-                setResumes(res.resumes);
+                const orderedResumes = [...res.resumes].sort( (a:any,b:any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+ );
+                setResumes(orderedResumes);
             }
         } catch (err) {
             console.error("Error fetching resumes:", err);
@@ -264,7 +266,7 @@ export default function ResumeEditor() {
                                 <option value="">Choose JD</option>
                                 {jdsList.map((jd) => (
                                     <option key={jd._id} value={jd._id}>
-                                        {jd.title || (jd.rawText ? (jd.rawText.length > 40 ? jd.rawText.substring(0, 40) + "..." : jd.rawText) : "Untitled JD")}
+                                        {jd.parsedText.metadata.jobTitle + '@' + jd.parsedText.metadata.company || (jd.rawText ? (jd.rawText.length > 40 ? jd.rawText.substring(0, 40) + "..." : jd.rawText) : "Untitled JD")}
                                     </option>
                                 ))}
                             </select>

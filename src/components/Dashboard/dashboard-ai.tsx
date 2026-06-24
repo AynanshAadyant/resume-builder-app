@@ -152,7 +152,6 @@ export default function AIWorkspace() {
         setLoading(true);
         try {
             const storeRes = await api.post("/jd", { JD: sanitized });
-
             if (storeRes.success && storeRes.data) {
                 const jdId = storeRes.data;
                 setJDID( jdId )
@@ -389,7 +388,7 @@ export default function AIWorkspace() {
                         :
                         resumeData 
                         ?
-                            <div className="resume-container">
+                            <div className="resume-container mt-20">
                                 <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="" />
                                 <button onClick={ 
                                     handleDownload

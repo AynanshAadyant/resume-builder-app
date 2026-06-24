@@ -7,7 +7,7 @@ export interface Education {
     location: string;
     startDate: string | Date;
     endDate: string | Date;
-    cgpa: number | string;
+    gpa: number | string;
     content?: string;
     user?: string | User;
 }

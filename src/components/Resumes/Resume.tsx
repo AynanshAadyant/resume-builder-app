@@ -47,7 +47,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
             ref={ref}
             className={`bg-gray-200 ${className}`}>
             <div className="bg-white w-[210mm] max-w-full min-h-[297mm] mx-auto shadow-lg ">
-                <div className="w-full text-black px-15 py-10 leading-relaxed text-[15px] font-serif">                
+                <div className="w-full text-black px-15 py-10 leading-relaxed text-[15px]">                
                         <header className="text-center border-b-2 border-black pb-4 mb-6">
                             <h1 className="resume-heading text-3xl font-bold">
                                 {user?.name || "Candidate Name"}
@@ -143,9 +143,9 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 </p>
                                             </div>
                                         </div>
-                                        <ul className="resume-list">
+                                        <ul className="resume-list ">
                                             {exp.contents.map((point, idx) => (
-                                                <li className="resume-list-item text-[14px]" key={idx}> - {point}</li>
+                                                <li className="resume-list-item font-semibold text-[13px]" key={idx}> - {point}</li>
                                             ))}
                                         </ul>
                                     </div>
@@ -225,7 +225,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
 
                                             <ul className="list">
                                                 {project.contents.map((point, idx) => (
-                                                    <li key={idx} className="text-[14px]">
+                                                    <li key={idx} className="text-[12px] font-semibold">
                                                         - {point}
                                                     </li>
                                                 ))}
@@ -260,11 +260,11 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                         key={skill._id ?? index}
                                         className="flex gap-2"
                                     >
-                                        <span className="font-bold min-w-[180px] text-[13px]">
+                                        <span className="font-bold min-w-[180px] text-[12px]">
                                             {skill.category}:
                                         </span>
 
-                                        <span>
+                                        <span className="font-semibold text-[12px]">
                                             {skill.values.join(", ")}
                                         </span>
                                     </div>
@@ -282,7 +282,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                 Education
                             </h2>
 
-                            <div className="">
+                            <div className="text-[12px]">
                                 {resume.education.map(
                                     (
                                         edu,
@@ -296,7 +296,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                             className="flex justify-between"
                                         >
                                             <div>
-                                                <h1 className="institution font-bold ">
+                                                <h1 className="institution font-bold text-[12px] ">
                                                     {
                                                         edu.institution
                                                     }
@@ -313,11 +313,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                         edu.fieldOfStudy
                                                     }
                                                 </p>
-
                                                 
-
-                                                
-
                                                 {edu.content && (
                                                     <p className="content mt-2">
                                                         {
@@ -327,11 +323,11 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 )}
                                             </div>
 
-                                            <div className="cgpa text-right text-sm">
+                                            <div className="cgpa text-right ">
                                                 <p>
                                                     CGPA:{" "}
                                                     {
-                                                        edu.cgpa
+                                                        edu.gpa
                                                     }
                                                 </p>
 
@@ -345,7 +341,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                     ).getFullYear()}
                                                 </p>
 
-                                                <p className="location text-sm text-gray-500">
+                                                <p className="location text-gray-500">
                                                     {
                                                         edu.location
                                                     }
@@ -378,22 +374,16 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 index
                                             }
                                         >
-                                            <h3 className="font-semibold">
+                                            <h3 className="font-semibold text-[12px]">
                                                 {
-                                                    cert.title
+                                                    cert.name
                                                 }
                                             </h3>
 
-                                            <p>
+                                            <p className="text-[12px]">
                                                 {
-                                                    cert.issuer
+                                                    cert.contents
                                                 }
-                                            </p>
-
-                                            <p className="text-sm text-gray-500">
-                                                {formatDate(
-                                                    cert.issueDate
-                                                )}
                                             </p>
 
                                             {cert.url && (
@@ -424,7 +414,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                 Achievements
                             </h2>
 
-                            <div className="space-y-4">
+                            <div className="text-[12px]">
                                 {resume.achievements.map(
                                     (
                                         achievement,
@@ -438,21 +428,15 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                         >
                                             <h3 className="font-semibold">
                                                 {
-                                                    achievement.title
+                                                    achievement.name
                                                 }
                                             </h3>
 
-                                            <p>
-                                                {
-                                                    achievement.description
-                                                }
-                                            </p>
-
-                                            <p className="text-sm text-gray-500">
-                                                {formatDate(
-                                                    achievement.issue_date
-                                                )}
-                                            </p>
+                                            {
+                                                achievement.contents.map( (content:any, index:any ) => 
+                                                    <p key={index} > { content } </p>
+                                                )
+                                            }
 
                                             {achievement.url && (
                                                 <a
@@ -477,12 +461,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                     {resume.extra?.length >
                         0 && (
                         <section>
-                            <h2 className="text-xl font-bold border-b pb-1 mb-4">
+                            <h2 className="text-xl font-bold underline">
                                 Additional
                                 Information
                             </h2>
 
-                            <div className="">
+                            <div className="text-[12px]">
                                 {resume.extra.map(
                                     (
                                         item,
@@ -497,11 +481,14 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 {item.title}
                                             </h3>
 
-                                            <p>
+                                            <ul>
                                                 {
-                                                    item.contents
+                                                item.contents.length > 0 &&
+                                                item.contents.map( (i : string, index:any ) => 
+                                                    <li key={index}> - { i } </li>
+                                                )
                                                 }
-                                            </p>
+                                            </ul>
                                         </div>
                                     )
                                 )}
