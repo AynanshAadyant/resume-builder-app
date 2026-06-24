@@ -3,8 +3,7 @@ import type { WorkExperience } from "./workExperience.type";
 import type { Project } from "./project.type";
 import type { Skill } from "./skill.type";
 import type { Education } from "./education.type";
-import type { Certification } from "./certification.type";
-import type { Achievement } from "./achievement.type";
+
 
 export interface Resume {
     _id?: any;
