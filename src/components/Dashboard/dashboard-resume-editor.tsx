@@ -28,9 +28,6 @@ function ResumeCard({ resume, handleDeleteResume, loadViewingResume }: ResumeCar
     const targetCompany = resume.company || "Target Company";
     const ats = resume?.ats?.toString() ?? 'N/A';
 
-    const [ deleting, setDeleting ] = useState<boolean>( false );
-
-
     return (
         <div className="group flex flex-col justify-between py-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
             <div className="mb-6 flex flex-row items-center justify-between">

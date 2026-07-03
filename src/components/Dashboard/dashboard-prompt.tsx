@@ -1,6 +1,5 @@
 import { 
-    Sparkles, 
-    CheckCircle,
+    Sparkles,
     AlertTriangle
 } from "lucide-react"
 import { useState } from "react"
@@ -12,34 +11,6 @@ import { useAppSelector } from "@/store/hooks"
 import ResumePreview from "../Resumes/Resume"
 import { useRef } from "react"
 import { usePrintPdf } from "@/utils/downloader"
-
-function GenerateResumeMessage() {
-    return(
-        <div className="generate-resume relative z-10 max-w-lg w-full">
-            <div className="bg-[var(--surface-container-low)]/70 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center shadow-2xl">
-                
-                <div className="w-16 h-16 rounded-2xl bg-[var(--secondary)]/10 border border-[var(--secondary)]/20 flex items-center justify-center mx-auto mb-6">
-                    <Sparkles className="w-8 h-8 text-[var(--secondary)]" />
-                </div>
-
-                <h2 className="text-3xl font-bold text-[var(--on-surface)] mb-3 font-['Satoshi']">
-                    Ready to Generate
-                </h2>
-
-                <p className="text-[var(--on-surface-variant)] leading-relaxed text-sm">
-                    Your job description has been successfully analyzed.
-                    Generate an ATS-optimized resume tailored specifically
-                    for this role.
-                </p>
-
-                <div className="mt-8 flex items-center justify-center gap-2 text-xs text-[var(--secondary)] tracking-wide uppercase">
-                    <div className="w-2 h-2 rounded-full bg-[var(--secondary)] animate-pulse" />
-                    AI Analysis Completed
-                </div>
-            </div>
-        </div>
-    )
-}
 
 function GeneratingResumeMessage() {
     return(
@@ -145,8 +116,9 @@ export default function ResumeFromPrompt() {
     
     const generateResume = async () => {
         try {
+            let santizedPrompt = sanitizeMultilineString( prompt )
             setResumeLoading( true )
-            const response = await api.post( "/resume/create/prompt", { profileID: p.profile._id, prompt : prompt })
+            const response = await api.post( "/resume/create/prompt", { profileID: p.profile._id, prompt : santizedPrompt })
             if( response.success ) {
                 setResumeError( false );
                 setResumeData( response.resume );

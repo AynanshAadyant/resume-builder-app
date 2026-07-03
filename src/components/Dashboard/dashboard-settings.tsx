@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { FileArchive, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/api/api";
 import { useAppSelector } from "@/store/hooks";
 import { toast } from "sonner";
-import { type Resume } from "@/types/resume.type";
-import { FileText, Building2, Eye, Trash2 } from "lucide-react";
 import ResumeTile from "../ResumeTile";
 import JDTile from "../JDTile";
-
+import { Link } from "react-router";
 
 export default function DashboardSettings() {
     const [userEmail, setUserEmail] = useState("");
@@ -115,57 +113,75 @@ export default function DashboardSettings() {
             </header>
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
-                    <CardHeader className="flex flex-row justify-between items-center gap-3">
-                        <div className="flex flex-row justify-center items-center gap-2">
-                            <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
-                                <UserCircle className="h-5 w-5" />
+                {
+                    loadingUser ?
+                    <h1> Loading ... </h1>
+                    :
+                    <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
+                        <CardHeader className="flex flex-row justify-between items-center gap-3">
+                            <div className="flex flex-row justify-center items-center gap-2">
+                                <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
+                                    <UserCircle className="h-5 w-5" />
+                                </div>
+                                <CardTitle className="text-xl text-slate-950">Account Details</CardTitle>
                             </div>
-                            <CardTitle className="text-xl text-slate-950">Account Details</CardTitle>
-                        </div>
-                        <Button variant="default" className={`bg-black text-white px-5 ${savingProfile ? `bg-gray-700` : ``}`}
-                            onClick={ (e) => {
-                                e.preventDefault();
-                                updateName();
-                            }}
-                        > {savingProfile ? `Saving Profile` : `Save Profile`} </Button>
-                    </CardHeader>
-                    <CardContent className="grid gap-4 md:grid-cols-2">
-                        <div className="rounded-lg flex flex-col border border-slate-200 bg-slate-50 p-4">
-                            <label htmlFor="name" className="text-xs font-semibold uppercase text-slate-400">Name</label>
-                            <input name="name" type="text" value={userName || "Alex"}
-                                onChange={(e) => {
+                            <Button variant="default" className={`bg-black text-white px-5 ${savingProfile ? `bg-gray-700` : ``}`}
+                                onClick={ (e) => {
                                     e.preventDefault();
-                                    setUserName(e.target.value)
+                                    updateName();
                                 }}
-                                className="mt-1 text-base font-medium text-slate-950"></input>
-                        </div>
-                        <div className="rounded-lg border flex flex-col border-slate-200 bg-slate-50 p-4">
-                            <label htmlFor="email" className="text-xs font-semibold uppercase text-slate-400">Email Address</label>
-                            <input readOnly={true} type="email" name="email" value={userEmail || "alex@example.com"}
-                                onChange={(e) => {
-                                    e.preventDefault();
-                                    setUserEmail(e.target.value)
-                                }}
-                                className="mt-1 text-base font-medium text-slate-950"></input>
-                        </div>
-                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 md:col-span-2">
-                            <span className="text-xs font-semibold uppercase text-slate-400">Active Resumes</span>
-                            <p className="mt-1 text-base font-medium text-slate-950">{resumes.length} tailored resumes generated</p>
-                        </div>
-                    </CardContent>
-                </Card>
+                            > {savingProfile ? `Saving Profile` : `Save Profile`} </Button>
+                        </CardHeader>
+                        <CardContent className="grid gap-4 md:grid-cols-2">
+                            <div className="rounded-lg flex flex-col border border-slate-200 bg-slate-50 p-4">
+                                <label htmlFor="name" className="text-xs font-semibold uppercase text-slate-400">Name</label>
+                                <input name="name" type="text" value={userName || "Alex"}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        setUserName(e.target.value)
+                                    }}
+                                    className="mt-1 text-base font-medium text-slate-950"></input>
+                            </div>
+                            <div className="rounded-lg border flex flex-col border-slate-200 bg-slate-50 p-4">
+                                <label htmlFor="email" className="text-xs font-semibold uppercase text-slate-400">Email Address</label>
+                                <input readOnly={true} type="email" name="email" value={userEmail || "alex@example.com"}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        setUserEmail(e.target.value)
+                                    }}
+                                    className="mt-1 text-base font-medium text-slate-950"></input>
+                            </div>
+                            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 md:col-span-2">
+                                <span className="text-xs font-semibold uppercase text-slate-400">Active Resumes</span>
+                                <p className="mt-1 text-base font-medium text-slate-950">{resumes.length} tailored resumes generated</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                }
 
                 <div className="resumes flex flex-col">
                     <h1> Resumes Generated : </h1>
                     {
+                        loadingResumes ? 
+                        <h1> Loading </h1>
+                        :
+                        resumes.length > 0 ?
                         resumes.map( (resume, index ) => <ResumeTile resume={resume} index={index} />)
+                        :
+                        <p> No resumes generated. Generate <Link to="/dashboard/ai"> Now </Link></p>
                     }
                 </div>
                 <div className="jds">
                     <h1> Job Description parsed : </h1>
                     {
+                        loadingJDs ?
+                        <h1> Loading ... </h1>
+                        :
+                        jds.length > 0 ?
                         jds.map( (jd, index) => <JDTile jd={jd} index={index}/>)
+                        :
+                        <p> No Job Descriptions parsed. Parse <Link to="/dashboard/ai"> Now </Link></p>
+
                     }
                 </div>
                 </div>

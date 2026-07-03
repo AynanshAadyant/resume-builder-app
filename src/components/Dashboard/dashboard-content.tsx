@@ -1,9 +1,5 @@
 import { Button } from "../ui/button"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+
 import {
     Upload,
     Plus,
@@ -11,8 +7,6 @@ import {
     FileText,
     Radar,
     Trophy,
-    Eye,
-    ChevronDown 
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import api from "@/api/api"
