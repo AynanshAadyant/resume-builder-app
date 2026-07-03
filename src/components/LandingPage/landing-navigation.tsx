@@ -1,13 +1,13 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router"
 import { Sparkles } from "lucide-react";
+import { useAppSelector } from "@/store/hooks";
 
 function AuthButtons() {
-    const isAuthenticated = false;
-
+    const isAuthenticated = useAppSelector( (state) => state.auth.isAuthenticated )
     if (isAuthenticated) {
         return (
-            <h1> is authenticated </h1>
+            <Link to="/dashboard"> <Button variant="ghost" className="text-white hover:bg-sky-400 cursor-pointer px-5"> Dashboard</Button></Link>
         )
     }
     else {

@@ -1,17 +1,25 @@
 import { Button } from "../ui/button"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
     Upload,
     Plus,
     TrendingUp,
     FileText,
     Radar,
     Trophy,
-    Eye
+    Eye,
+    ChevronDown 
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import api from "@/api/api"
 import { useNavigate, Link } from "react-router"
 import { useAppSelector } from "@/store/hooks"
+import ResumeTile from "../ResumeTile"
+import JDTile from "../JDTile"
 
 export default function MainContent() {
     const navigate = useNavigate();
@@ -21,7 +29,7 @@ export default function MainContent() {
     const [resumesCount, setResumesCount] = useState(0);
     const [jdsCount, setJdsCount] = useState(0);
     const [jds, setJDs] = useState<any[]>([])
-    const [avgAtsScore, setAvgAtsScore] = useState(85);
+    const [avgAtsScore, setAvgAtsScore] = useState(-1);
     const [resumes, setResumes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -29,11 +37,9 @@ export default function MainContent() {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-                console.log( "Fetching resumes" );
                 const resumesRes = await api.get("/resume");
                 let fetchedResumes = [];
                 if (resumesRes.success && resumesRes.resumes) {
-                    console.log("Resumes fetched successfully" );
                     fetchedResumes = resumesRes.resumes;
                     setResumes(fetchedResumes);
                     setResumesCount(fetchedResumes.length);
@@ -80,7 +86,7 @@ export default function MainContent() {
         {
             id: 3,
             title: "Avg. ATS Score",
-            value: avgAtsScore.toString(),
+            value: avgAtsScore > 0 ? avgAtsScore.toString() : "N/A",
             suffix: "/100",
             progress: avgAtsScore,
             icon: Trophy,
@@ -161,7 +167,7 @@ export default function MainContent() {
                         <Upload className="h-4 w-4" />
                         Upload JD
                     </Button>
-                    <Button onClick={() => navigate("/dashboard/resume")} className="flex items-center gap-2 rounded-lg bg-slate-950 px-4 py-2 text-white transition-colors hover:bg-slate-800">
+                    <Button onClick={() => navigate("/dashboard/prompt")} className="flex items-center gap-2 rounded-lg bg-slate-950 px-4 py-2 text-white transition-colors hover:bg-slate-800">
                         <Plus className="h-4 w-4" />
                         New Resume
                     </Button>
@@ -191,42 +197,9 @@ export default function MainContent() {
                                         Loading resumes...
                                     </div>
                                 ) : resumes.length > 0 ? (
-                                    resumes.slice(0, 3).map((resume: any, index: number) => {
-                                        const targetRole = (resume.workExp && resume.workExp[0] && resume.workExp[0].post) || "Software Engineer";
-                                        const targetCompany = (resume.workExp && resume.workExp[0] && resume.workExp[0].organisation) || "Target Company";
-                                        const score = resume.ats || 0;
-                                        const createdAt = resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : "recently";
-
-                                        return (
-                                            <div key={resume._id || index} className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-cyan-200">
-                                                <div className="flex items-center gap-6">
-                                                    <div className="relative flex h-16 w-12 items-center justify-center rounded border border-slate-200 bg-slate-50 shadow-sm">
-                                                        <span className="text-center font-['IBM_Plex_Serif'] text-[8px] leading-tight text-slate-400">
-                                                            RESUME<br />v{index + 1}.0
-                                                        </span>
-                                                        <div className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="font-['Inter'] text-base font-semibold text-slate-950">{targetRole}</h4>
-                                                        <p className="font-['Inter'] text-sm text-slate-500">
-                                                            Target: {targetCompany} | Optimized {createdAt}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-6">
-                                                    <div className="text-center">
-                                                        <span className="mb-1 block font-['Satoshi'] text-2xl font-bold leading-none text-emerald-700">{score}</span>
-                                                        <span className="text-[10px] font-semibold uppercase text-slate-400">ATS Score</span>
-                                                    </div>
-                                                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                                                        <button onClick={() => navigate("/dashboard/resume")} className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-950">
-                                                            <Eye className="h-5 w-5" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    })
+                                    resumes.slice(0, 3).map((resume: any, index: number) => 
+                                        <ResumeTile resume={resume} index={index} />
+                                    )
                                 ) : (
                                     <div className="rounded-lg border border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
                                         No resumes generated yet. Go to <Link to="/dashboard/resume" className="text-cyan-700 hover:underline">Resume Editor</Link> to create one.
@@ -246,50 +219,10 @@ export default function MainContent() {
                             {jds.length} Total
                         </span>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 overflow-y-scroll">
                         {jds.length > 0 ? (
                             jds.slice(0, 5).map((jd, index) => {
-                                const company =
-                                    jd?.parsedText?.metadata?.company || "Unknown Company";
-
-                                const jobTitle =
-                                    jd?.parsedText?.metadata?.jobTitle || "Unknown Role";
-
-                                const skills =
-                                    jd?.parsedText?.skills?.required?.length || 0;
-
-                                return (
-                                    <div
-                                        key={index}
-                                        className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-cyan-200 hover:shadow-md"
-                                    >
-                                        <div className="flex items-start justify-between">
-                                            <div>
-                                                <h4 className="font-['Inter'] text-base font-semibold text-slate-950">
-                                                    {jobTitle}
-                                                </h4>
-
-                                                <p className="mt-1 text-sm text-slate-500">
-                                                    {company}
-                                                </p>
-                                            </div>
-
-                                            <div className="rounded-lg bg-cyan-50 px-2 py-1 text-xs font-semibold text-cyan-700">
-                                                JD #{index + 1}
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-3 flex items-center justify-between">
-                                            <span className="text-xs text-slate-400">
-                                                {skills} skills detected
-                                            </span>
-
-                                            <button className="opacity-0 transition-opacity group-hover:opacity-100">
-                                                <Eye className="h-4 w-4 text-slate-500 hover:text-slate-950" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
+                                return <JDTile jd={jd} index={index}/>
                             })
                         ) : (
                             <div className="rounded-lg border border-slate-200 bg-white py-8 text-center text-sm text-slate-500">
@@ -299,8 +232,6 @@ export default function MainContent() {
                     </div>
                 </div>
             </section>
-
-
         </div>
     )
 }

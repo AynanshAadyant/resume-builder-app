@@ -1,41 +1,109 @@
 import { useState, useEffect } from "react";
-import { UserCircle } from "lucide-react";
+import { FileArchive, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/api/api";
 import { useAppSelector } from "@/store/hooks";
+import { toast } from "sonner";
+import { type Resume } from "@/types/resume.type";
+import { FileText, Building2, Eye, Trash2 } from "lucide-react";
+import ResumeTile from "../ResumeTile";
+import JDTile from "../JDTile";
+
 
 export default function DashboardSettings() {
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
-    const [resumesCount, setResumesCount] = useState(0);
+    const [loadingUser, setLoadingUser ] = useState(false)
+    const [resumes, setResumes ] = useState( [] )
+    const [loadingResumes, setLoadingResumes ] = useState( false );
+    const [jds, setJDs ] = useState([]);
+    const [loadingJDs, setLoadingJDs ] = useState( false );
+    const [savingProfile, setSavingProfile] = useState( false );
 
 
     const user = useAppSelector((state) => state.auth.user)
-
+    
     //functions
-
-
-    useEffect(() => {
-        const loadInitialData = async () => {
-            try {
-                const userRes = user;
-                setUserName(userRes.name);
-                setUserEmail(userRes.email);
-                const resumeRes = await api.get("/resume/");
-                if (resumeRes.success && resumeRes.resumes) {
-                    setResumesCount(resumeRes.resumes.length);
-                }
-
-            } catch (err) {
-                console.error("Error loading account data:", err);
+    const fetchUser = async() => {
+        try {
+            setLoadingUser( true );
+            if( user ) {
+                setUserEmail( user.email );
+                setUserName( user.name );
             }
-        };
-        loadInitialData();
-    }, []);
+            else {
+                const response = await api.get( "/auth/current")
+                if( response.success && response.body ) {
+                    setUserEmail( response.body.email );
+                    setUserName( response.body.name );
+                }
+            }
+        }
+        catch( e : any ) {
+            console.error( e );
+        }
+        finally {
+            setLoadingUser( false );
+        }
+    }
+    const fetchResumes = async() => {
+        try {
+            setLoadingResumes( true );
+            const response = await api.get( "/resume");
+            if( response.success && response.resumes ) {
+                setResumes( response.resumes )
+            }
+        }
+        catch ( e : any ) {
+            console.log( "ERROR : ", e );
+        }
+        finally {
+            setLoadingResumes( false );
+        }
+    }
 
+    const fetchJDs = async() => {
+        try {
+            setLoadingJDs( true )
+            const response = await api.get( "/jd" )
+            if( response.success && response.data ) {
+                setJDs( response.data );
+            }
+        }
+        catch( e : any ) {
+            console.error( e );
+        }
+        finally {
+            setLoadingJDs( false );
+        }
+    }
 
+    const updateName = async() => {
+        setSavingProfile( true );
+        try {
+            const response = await api.put( "/auth/update", {userName} );
+            if( response.success ) {
+                toast.success( response.message );
+            }
+            else
+                toast.error( response.message );
+        }
+        catch( e : any ) {
+            toast.error( "Something went wrong" );
+        }
+        finally{
+            setSavingProfile( false );
+        }
+    }
 
+    const fetchInitialData = async() => {
+        await fetchUser();
+        await fetchResumes();
+        await fetchJDs();
+    }
+
+    useEffect( () => { fetchInitialData() }, [] );
 
     return (
         <div className="p-8 w-full max-w-[1180px] pb-12">
@@ -46,41 +114,61 @@ export default function DashboardSettings() {
                 </div>
             </header>
 
-            <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
-                <CardHeader className="flex flex-row justify-between items-center gap-3">
-                    <div className="flex flex-row justify-center items-center gap-2">
-                        <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
-                            <UserCircle className="h-5 w-5" />
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <Card className="rounded-lg border-slate-200 bg-white shadow-sm">
+                    <CardHeader className="flex flex-row justify-between items-center gap-3">
+                        <div className="flex flex-row justify-center items-center gap-2">
+                            <div className="rounded-lg bg-slate-100 p-2 text-slate-700">
+                                <UserCircle className="h-5 w-5" />
+                            </div>
+                            <CardTitle className="text-xl text-slate-950">Account Details</CardTitle>
                         </div>
-                        <CardTitle className="text-xl text-slate-950">Account Details</CardTitle>
-                    </div>
-                    <Button variant="default"> Save Profile </Button>
-                </CardHeader>
-                <CardContent className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-lg flex flex-col border border-slate-200 bg-slate-50 p-4">
-                        <label htmlFor="name" className="text-xs font-semibold uppercase text-slate-400">Name</label>
-                        <input name="name" type="text" value={userName || "Alex"}
-                            onChange={(e) => {
+                        <Button variant="default" className={`bg-black text-white px-5 ${savingProfile ? `bg-gray-700` : ``}`}
+                            onClick={ (e) => {
                                 e.preventDefault();
-                                setUserName(e.target.value)
+                                updateName();
                             }}
-                            className="mt-1 text-base font-medium text-slate-950"></input>
-                    </div>
-                    <div className="rounded-lg border flex flex-col border-slate-200 bg-slate-50 p-4">
-                        <label htmlFor="email" className="text-xs font-semibold uppercase text-slate-400">Email Address</label>
-                        <input type="email" name="email" value={userEmail || "alex@example.com"}
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setUserEmail(e.target.value)
-                            }}
-                            className="mt-1 text-base font-medium text-slate-950"></input>
-                    </div>
-                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 md:col-span-2">
-                        <span className="text-xs font-semibold uppercase text-slate-400">Active Resumes</span>
-                        <p className="mt-1 text-base font-medium text-slate-950">{resumesCount} tailored resumes generated</p>
-                    </div>
-                </CardContent>
-            </Card>
+                        > {savingProfile ? `Saving Profile` : `Save Profile`} </Button>
+                    </CardHeader>
+                    <CardContent className="grid gap-4 md:grid-cols-2">
+                        <div className="rounded-lg flex flex-col border border-slate-200 bg-slate-50 p-4">
+                            <label htmlFor="name" className="text-xs font-semibold uppercase text-slate-400">Name</label>
+                            <input name="name" type="text" value={userName || "Alex"}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    setUserName(e.target.value)
+                                }}
+                                className="mt-1 text-base font-medium text-slate-950"></input>
+                        </div>
+                        <div className="rounded-lg border flex flex-col border-slate-200 bg-slate-50 p-4">
+                            <label htmlFor="email" className="text-xs font-semibold uppercase text-slate-400">Email Address</label>
+                            <input readOnly={true} type="email" name="email" value={userEmail || "alex@example.com"}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    setUserEmail(e.target.value)
+                                }}
+                                className="mt-1 text-base font-medium text-slate-950"></input>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 md:col-span-2">
+                            <span className="text-xs font-semibold uppercase text-slate-400">Active Resumes</span>
+                            <p className="mt-1 text-base font-medium text-slate-950">{resumes.length} tailored resumes generated</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="resumes flex flex-col">
+                    <h1> Resumes Generated : </h1>
+                    {
+                        resumes.map( (resume, index ) => <ResumeTile resume={resume} index={index} />)
+                    }
+                </div>
+                <div className="jds">
+                    <h1> Job Description parsed : </h1>
+                    {
+                        jds.map( (jd, index) => <JDTile jd={jd} index={index}/>)
+                    }
+                </div>
+                </div>
         </div>
     );
 }

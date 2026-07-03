@@ -19,6 +19,7 @@ import DashboardSettings from "./components/Dashboard/dashboard-settings"
 import DashboardSupport from "./components/Dashboard/dashboard-support"
 
 import { Toaster } from "sonner"
+import ResumeFromPrompt from "./components/Dashboard/dashboard-prompt"
 
 export default function App() {
   return (
@@ -53,7 +54,7 @@ export default function App() {
             <Route path="insights" element={<Insights />} />
             <Route path="settings" element={<DashboardSettings />} />
             <Route path="support" element={<DashboardSupport />} />
-
+            <Route path="prompt" element={<ResumeFromPrompt />}></Route>
           </Route>
         </Route>
 

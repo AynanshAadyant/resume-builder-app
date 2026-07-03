@@ -4,7 +4,8 @@ import {
   LayoutDashboard,
   UserCircle,
   Brain,
-  FileEdit
+  FileEdit,
+  Settings
 } from "lucide-react"
 
 import {
@@ -22,6 +23,9 @@ import {
 import { Button } from "./ui/button"
 import api from "@/api/api"
 import { toast } from "sonner"
+import { useDispatch } from "react-redux"
+import { logout } from "@/store/slice/authSlice"
+import { Spinner } from "@/components/ui/spinner"
 
 const data = {
   navMain: [
@@ -29,6 +33,8 @@ const data = {
     { title: "Profile Builder", url: "/dashboard/profile", icon: UserCircle },
     { title: "AI Workspace", url: "/dashboard/ai", icon: Brain },
     { title: "Resume Editor", url: "/dashboard/resume", icon: FileEdit },
+    { title : "Settings", url: "/dashboard/settings", icon: Settings },
+
   ],
   navFooter: [
     // { title : "Settings", url: "/dashboard/settings", icon: Settings },
@@ -38,13 +44,26 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [ loggingOut, setLoggingOut ] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    const logout = await api.post('/auth/logout')
-    if (logout.success) {
-      toast.success("Log out successful");
-      navigate("/");
+    try {
+      setLoggingOut( true );
+      await new Promise(resolve => setTimeout(resolve, 1300));
+      const response = await api.post('/auth/logout')
+      if (response.success) {
+        dispatch( logout() );
+        toast.success("Log out successful");
+        navigate("/");
+      }
+    }
+    catch( e : any ) {
+      toast.error( "Unable to log out" );
+    }
+    finally {
+      setLoggingOut( false );
     }
   }
 
@@ -81,11 +100,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarFooter className="mt-auto border-t border-slate-200 px-4 pb-6 pt-6">
         <Button
-          onClick={() => {
-            handleLogout()
-          }}
-          className="bg-red-600 text-white font-[Satoshi] font-bold  hover:bg-red-800"> Logout </Button>
-
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className={`flex items-center gap-2 bg-red-600 text-white font-[Satoshi] font-bold hover:bg-red-800 ${
+            loggingOut ? "bg-red-500 cursor-not-allowed" : ""
+          }`}
+        >
+          {loggingOut && <Spinner />}
+          {loggingOut ? "Logging Out..." : "Log out"}
+        </Button>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

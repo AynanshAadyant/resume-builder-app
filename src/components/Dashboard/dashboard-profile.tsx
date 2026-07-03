@@ -49,7 +49,7 @@ export default function ProfileBuilder() {
                         return;
                     dispatch( setProfile( d ) )
                 }
-                setBasicInfo( d.profile );
+                setBasicInfo( d.profile || { phoneNo : "", location : "", linkedIn : "", github : "", portfolio : ""} );
                 setEducation(d.education || []);
                 setProjects(d.projects || []);
                 setWorkExperiences(d.workExperiences || []);
@@ -78,7 +78,7 @@ export default function ProfileBuilder() {
     };
 
     const handleSave = async () => {
-        if (!basicInfo.phoneNo) {
+        if (!basicInfo.phoneNo || basicInfo.phoneNo.trim() === "" ) {
             return toast.error("Phone number is required");
         }
         if (!basicInfo.location) {
@@ -91,7 +91,7 @@ export default function ProfileBuilder() {
 
             // Sanitize basic profile
             const sanitizedBasic = {
-                phoneNo: basicInfo.phoneNo,
+                phoneNo: sanitizeString(basicInfo.phoneNo),
                 location: sanitizeString(basicInfo.location),
                 linkedIn: sanitizeString(basicInfo.linkedIn),
                 github: sanitizeString(basicInfo.github),
@@ -246,7 +246,7 @@ export default function ProfileBuilder() {
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">Phone Number *</label>
                                 <input 
-                                    type="number"
+                                    type="text"
                                     className="w-full bg-[var(--surface-container)] border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-[var(--secondary)] transition-colors text-white"
                                     value={basicInfo?.phoneNo || ""}
                                     onChange={(e) => setBasicInfo({ ...basicInfo, phoneNo: e.target.value })}

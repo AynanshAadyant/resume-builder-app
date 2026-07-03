@@ -28,6 +28,8 @@ function ResumeCard({ resume, handleDeleteResume, loadViewingResume }: ResumeCar
     const targetCompany = resume.company || "Target Company";
     const ats = resume?.ats?.toString() ?? 'N/A';
 
+    const [ deleting, setDeleting ] = useState<boolean>( false );
+
 
     return (
         <div className="group flex flex-col justify-between py-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-cyan-200">
@@ -264,10 +266,12 @@ export default function ResumeEditor() {
                                 onChange={(e) => setSelectedJdId(e.target.value)}
                             >
                                 <option value="">Choose JD</option>
-                                {jdsList.map((jd) => (
-                                    <option key={jd._id} value={jd._id}>
-                                        {jd.parsedText.metadata.jobTitle + '@' + jd.parsedText.metadata.company || (jd.rawText ? (jd.rawText.length > 40 ? jd.rawText.substring(0, 40) + "..." : jd.rawText) : "Untitled JD")}
-                                    </option>
+                                {
+                                    jdsList.length > 0 &&
+                                    jdsList.map((jd) => (
+                                        <option key={jd._id} value={jd._id}>
+                                            {jd?.parsedText?.metadata?.jobTitle + '@' + jd?.parsedText?.metadata?.company || (jd?.rawText ? (jd?.rawText?.length > 40 ? jd.rawText.substring(0, 40) + "..." : jd?.rawText) : "Untitled JD")}
+                                        </option>
                                 ))}
                             </select>
                         </div>
@@ -296,8 +300,8 @@ export default function ResumeEditor() {
             )}
 
             {viewingResume && (
-                <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-gray-400 backdrop-blur-md">
-                    <div className="buttons flex flex-row items-center justify-center">
+                <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-gray-200 backdrop-blur-md">
+                    <div className="fixed inset-x-0 top-0 z-60 buttons flex flex-row items-center justify-center">
                         <button
                             onClick={() => setViewingResume(null)}
                             className="fixed right-6 top-6 z-50 rounded-lg bg-white p-2 text-slate-700 shadow-lg hover:bg-slate-100"
@@ -306,8 +310,9 @@ export default function ResumeEditor() {
                         </button>
                         <button className="fixed bg-black text-white px-5 rounded left-6 top-6 z-50" onClick={handleDownload}> Download </button>
                     </div>
-
-                    <ResumePreview ref={resumeRef} resume={viewingResume} profile={completeProfile?.profile} user={user} />
+                    <div className="h-full overflow-y-auto pt-5">
+                        <ResumePreview ref={resumeRef} resume={viewingResume} profile={completeProfile?.profile} user={user} />
+                    </div>                        
                 </div>
             )}
         </div>

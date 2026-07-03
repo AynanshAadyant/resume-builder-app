@@ -22,7 +22,12 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
         },
         ref
     ) => {
-
+    console.log( "Resume" );
+    console.log( resume );
+    console.log( "profile" );
+    console.log( profile );
+    console.log( "user" )
+    console.log( user )
     if( !resume || !profile || !user ) {
         return(
             <h1> Missing Fields </h1>
@@ -47,7 +52,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
             ref={ref}
             className={`bg-gray-200 ${className}`}>
             <div className="bg-white w-[210mm] max-w-full min-h-[297mm] mx-auto shadow-lg ">
-                <div className="w-full text-black px-15 py-10 leading-relaxed text-[15px]">                
+                <div className="w-full text-black px-15 py-5 leading-relaxed text-[15px]">                
                         <header className="text-center border-b-2 border-black pb-4 mb-6">
                             <h1 className="resume-heading text-3xl font-bold">
                                 {user?.name || "Candidate Name"}
@@ -230,16 +235,6 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                     </li>
                                                 ))}
                                             </ul>
-
-                                            <p className="text-sm text-gray-500">
-                                                {formatDate(
-                                                    project.startDate
-                                                )}
-                                                {" - "}
-                                                {formatDate(
-                                                    project.endDate
-                                                )}
-                                            </p>
                                         </div>
                                     )
                                 )}

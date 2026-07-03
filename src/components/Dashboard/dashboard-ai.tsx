@@ -176,14 +176,16 @@ export default function AIWorkspace() {
     const generateResume = async ( profile_id : any, jd_id : any ) => {
         try {
             setResumeLoading( true )
-            console.log( profile_id, " ", jd_id )
+            if( !profile_id || !jd_id ) {
+                toast.error( "Missing Profile or JD" );
+                return;
+            }
             const response = await api.post( "/resume/create", { profileID: profile_id, jdID : jd_id })
             if( response.success ) {
                 setResumeError( false );
                 setResumeData( response.resume );
             }
             else {
-                console.log( response );
                 setResumeError( true );
             }
         }
@@ -252,11 +254,11 @@ export default function AIWorkspace() {
                             <div className="bg-[var(--surface-container)] border border-white/5 rounded-xl p-4 flex flex-col gap-4">
                                 <div>
                                     <span className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider block mb-1">Job Title / Role</span>
-                                    <div className="text-sm font-medium">{parsedData.metadata?.jobTitle || "Not found"}</div>
+                                    <div className="text-sm font-medium">{parsedData?.metadata?.jobTitle || "Not found"}</div>
                                 </div>
                                 <div>
                                     <span className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider block mb-1">Company / Organization</span>
-                                    <div className="text-sm font-medium">{parsedData.metadata?.company || "Not found"}</div>
+                                    <div className="text-sm font-medium">{parsedData?.metadata?.company || "Not found"}</div>
                                 </div>
                             </div>
                         </section>
@@ -267,7 +269,7 @@ export default function AIWorkspace() {
                                 Extracted Keywords & Skills
                             </h4>
 
-                            {!parsedData.skills ? (
+                            {!parsedData?.skills ? (
                                 <div className="text-sm text-gray-400">
                                     No skills found.
                                 </div>
@@ -275,14 +277,14 @@ export default function AIWorkspace() {
                                 <div className="space-y-6">
 
                                     {/* Required Skills */}
-                                    {Array.isArray(parsedData.skills.required) && (
+                                    {Array.isArray(parsedData?.skills?.required) && parsedData?.skills?.required.length > 0 && (
                                         <div>
                                             <h5 className="text-sm font-semibold mb-3 text-[var(--secondary)]">
                                                 Required Skills
                                             </h5>
 
                                             <div className="flex flex-wrap gap-2">
-                                                {parsedData.skills.required.map(
+                                                {parsedData?.skills?.required.map(
                                                     (skill: string, index: number) => (
                                                         <div
                                                             key={index}
@@ -300,7 +302,7 @@ export default function AIWorkspace() {
                                     )}
 
                                     {/* Preferred Skills */}
-                                    {Array.isArray(parsedData.skills.preferred) && (
+                                    {Array.isArray(parsedData?.skills?.preferred) && parsedData?.skills?.preferred.length > 0 && (
                                         <div>
                                             <h5 className="text-sm font-semibold mb-3 text-cyan-400">
                                                 Preferred Skills
@@ -325,8 +327,8 @@ export default function AIWorkspace() {
                                     )}
 
                                     {/* Categorized Skills */}
-                                    {parsedData.skills.categorized &&
-                                        typeof parsedData.skills.categorized === "object" && (
+                                    {parsedData?.skills?.categorized &&
+                                        typeof parsedData?.skills?.categorized === "object" && (
                                             <div>
                                                 <h5 className="text-sm font-semibold mb-3 text-purple-400">
                                                     Categorized Skills
@@ -334,7 +336,7 @@ export default function AIWorkspace() {
 
                                                 <div className="space-y-4">
                                                     {Object.entries(
-                                                        parsedData.skills.categorized
+                                                        parsedData?.skills?.categorized
                                                     ).map(([category, skills]: any) => {
                                                         if( skills.length > 0 )
                                                         return(
@@ -389,7 +391,7 @@ export default function AIWorkspace() {
                         resumeData 
                         ?
                             <div className="resume-container mt-20">
-                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="" />
+                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="mt-20" />
                                 <button onClick={ 
                                     handleDownload
                                 }> Download </button>
