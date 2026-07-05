@@ -167,7 +167,7 @@ export default function AIWorkspace() {
                 toast.error(storeRes.message || "Failed to store JD");
             }
         } catch (err: any) {
-            toast.error(err?.message || "An error occurred during analysis");
+            toast.error( "An error occurred during analysis");
         } finally {
             setLoading(false);
         }
@@ -377,11 +377,7 @@ export default function AIWorkspace() {
             </aside>
 
             {/* Right Panel: Resume Studio */}
-            <main className="flex-1 overflow-auto ">                
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-[var(--secondary)]/10 blur-3xl rounded-full" />
-                    <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-cyan-500/5 blur-3xl rounded-full" />
-                </div>
+            <main className="flex-1 ">                
                 <div className="rights h-[calc(100vh-80px)] flex flex-col justify-center items-center overflow-y-auto overflow-x-auto">
                     {
                         resumeError
@@ -390,8 +386,8 @@ export default function AIWorkspace() {
                         :
                         resumeData 
                         ?
-                            <div className="resume-container mt-20">
-                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="mt-20" />
+                            <div className="resume-container pt-80">
+                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="mt-[100px]" />
                                 <button onClick={ 
                                     handleDownload
                                 }> Download </button>

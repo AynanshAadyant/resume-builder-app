@@ -125,7 +125,9 @@
   color: #64748b !important;
 }
 
-.profile-builder-clean main,
+.profile-builder-clean main  {
+  border-color: #e2e8f0 !important;
+}
 .profile-builder-clean [class*="surface-container"] {
   background: #ffffff !important;
   border-color: #e2e8f0 !important;

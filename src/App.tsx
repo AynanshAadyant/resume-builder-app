@@ -11,15 +11,15 @@ import ProtectedRoute from "./components/protect-route"
 import Dashboard from "./pages/Dashboard"
 
 import MainContent from "./components/Dashboard/dashboard-content"
-import ProfileBuilder from "./components/Dashboard/dashboard-profile"
 import AIWorkspace from "./components/Dashboard/dashboard-ai"
-import ResumeEditor from "./components/Dashboard/dashboard-resume-editor"
 import Insights from "./components/Dashboard/dashboard-insights"
 import DashboardSettings from "./components/Dashboard/dashboard-settings"
 import DashboardSupport from "./components/Dashboard/dashboard-support"
 
 import { Toaster } from "sonner"
 import ResumeFromPrompt from "./components/Dashboard/dashboard-prompt"
+import ResumeViewer from "./components/Dashboard/dashboard-resume-editor"
+import ProfileBuilderScroll from "./components/Dashboard/dashboard-profile-scroll"
 
 export default function App() {
   return (
@@ -48,9 +48,9 @@ export default function App() {
             <Route index element={<MainContent />} />
 
             {/* Nested Dashboard Routes */}
-            <Route path="profile" element={<ProfileBuilder />} />
+            <Route path="profile" element={<ProfileBuilderScroll />} />
             <Route path="ai" element={<AIWorkspace />} />
-            <Route path="resume" element={<ResumeEditor />} />
+            <Route path="resume" element={<ResumeViewer />} />
             <Route path="insights" element={<Insights />} />
             <Route path="settings" element={<DashboardSettings />} />
             <Route path="support" element={<DashboardSupport />} />

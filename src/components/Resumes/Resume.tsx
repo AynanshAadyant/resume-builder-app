@@ -22,12 +22,6 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
         },
         ref
     ) => {
-    console.log( "Resume" );
-    console.log( resume );
-    console.log( "profile" );
-    console.log( profile );
-    console.log( "user" )
-    console.log( user )
     if( !resume || !profile || !user ) {
         return(
             <h1> Missing Fields </h1>

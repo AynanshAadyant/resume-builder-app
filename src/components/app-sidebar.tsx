@@ -5,7 +5,8 @@ import {
   UserCircle,
   Brain,
   FileEdit,
-  Settings
+  Settings,
+  Sparkles
 } from "lucide-react"
 
 import {
@@ -32,7 +33,7 @@ const data = {
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
     { title: "Profile Builder", url: "/dashboard/profile", icon: UserCircle },
     { title: "AI Workspace", url: "/dashboard/ai", icon: Brain },
-    { title : "Custom Resume", url: "/dashboard/prompt", icon: Brain },
+    { title : "Custom Resume", url: "/dashboard/prompt", icon: Sparkles },
     { title: "Resume Editor", url: "/dashboard/resume", icon: FileEdit },
     { title : "Settings", url: "/dashboard/settings", icon: Settings },
 
