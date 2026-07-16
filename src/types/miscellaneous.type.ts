@@ -1,7 +1,7 @@
 import { type User } from "./user.type"
 
 export interface Miscellaneous {
-    name : String,
-    description : String,
+    name : string,
+    description : string,
     user : User 
 }

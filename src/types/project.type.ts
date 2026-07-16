@@ -3,12 +3,12 @@ import { type User } from "./user.type"
 export interface Project {
     _id?: string;
     title: string;
-    techStack: string[];
-    contents: string[];
-    startDate: string | Date;
-    endDate: string | Date;
+    tech_stack: string[];
+    description: string[];
+    startDate?: string | Date;
+    endDate?: string | Date;
     features ?: string;
-    githubLink?: string;
-    projectLink?: string;
+    github_link?: string;
+    live_link?: string;
     user?: string | User;
 }
