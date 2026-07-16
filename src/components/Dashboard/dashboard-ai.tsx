@@ -129,6 +129,35 @@ function DefaultResumeMessage() {
     )
 }
 
+function AnalysingJobDescriptionMessage() {
+    return(
+        <div className="generating-resume relative z-10 max-w-lg w-full">
+            <div className="bg-[var(--surface-container-low)]/70 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center shadow-2xl">
+
+                <div className="relative w-16 h-16 mx-auto mb-6">
+                    <div className="absolute inset-0 rounded-full border-4 border-[var(--secondary)]/20" />
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[var(--secondary)] animate-spin" />
+                </div>
+
+                <h2 className="text-3xl font-bold text-[var(--on-surface)] mb-3 font-['Satoshi']">
+                    Analysing Job Description
+                </h2>
+
+                <p className="text-[var(--on-surface-variant)] text-sm leading-relaxed">
+                    AI is optimizing your resume for ATS systems,
+                    recruiter expectations, and technical relevance.
+                </p>
+
+                <div className="mt-8 flex justify-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-[var(--secondary)] animate-bounce" />
+                    <span className="w-2 h-2 rounded-full bg-[var(--secondary)] animate-bounce delay-100" />
+                    <span className="w-2 h-2 rounded-full bg-[var(--secondary)] animate-bounce delay-200" />
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default function AIWorkspace() {
 
@@ -205,9 +234,17 @@ export default function AIWorkspace() {
     })
 
     return(
-        <div className="ai-workspace-clean flex h-[calc(100vh-4rem)] overflow-hidden text-white">
+        <div className="ai-workspace-clean w-[1265px] flex text-white h-screen">
             {/* Left Panel: JD Intelligence */}
-            <aside className="w-1/3 pl-8 pt-2 min-w-[400px] border-r border-white/5 bg-[var(--surface-container-low)] overflow-y-auto flex flex-col relative z-10">
+            <aside className="w-1/3
+                min-w-[400px]
+                flex
+                flex-col
+                overflow-y-auto
+                h-full
+                border-r
+                border-white/5
+                bg-[var(--surface-container-low)]">
                 <div className="p-6 border-b border-white/5 sticky top-0 bg-[var(--surface-container-low)]/90 backdrop-blur z-20">
                     <div className="flex flex-col gap-4 mb-2">
                         <div>
@@ -247,7 +284,7 @@ export default function AIWorkspace() {
                 </div>
 
                 {parsedData && (
-                    <div className="p-6 space-y-12">
+                    <div className="p-6 space-y-12 h-1/2 overflow-y-scroll">
                         {/* Extracted Data */}
                         <section>
                             <h4 className="font-semibold text-xs tracking-widest uppercase text-[var(--on-surface-variant)] mb-4 border-b border-white/5 pb-2">Parsed Results</h4>
@@ -377,33 +414,55 @@ export default function AIWorkspace() {
             </aside>
 
             {/* Right Panel: Resume Studio */}
-            <main className="flex-1 ">                
-                <div className="rights h-[calc(100vh-80px)] flex flex-col justify-center items-center overflow-y-auto overflow-x-auto">
-                    {
-                        resumeError
-                        ?
+            <main className="flex-1
+                        flex
+                        flex-col
+                        items-center
+                        overflow-x-scroll
+                        overflow-y-auto
+                        h-full
+                        bg-[var(--surface-container-low)]
+                ">                
+                {
+                    resumeError
+                    ?
+                        <div className="mt-20">
                             <ResumeErrorMessage />
-                        :
-                        resumeData 
-                        ?
-                            <div className="resume-container pt-80">
-                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="mt-[100px]" />
-                                <button onClick={ 
-                                    handleDownload
-                                }> Download </button>
-                            </div>
-                        :
-                        resumeLoading
-                        ?
+                        </div>
+                    :
+                    loading
+                    ?
+                        <div className="mt-20">
+                            <AnalysingJobDescriptionMessage />
+                        </div>
+                    :
+                    resumeData 
+                    ?
+                        <div className="resume-container p-10 bg-gray-200 flex flex-col justify-center items-center">
+                            <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} />
+                            <button onClick={ 
+                                handleDownload
+                            }
+                            className="bg-black rounded-full z-50 fixed bottom-5 px-8 py-1 text-white"
+                            > Download </button>
+                        </div>
+                    :
+                    resumeLoading
+                    ?
+                        <div className="mt-20">
                             <GeneratingResumeMessage />
-                        :
-                        parsedData
-                        ?
-                            <GenerateResumeMessage />
-                        :
+                        </div>
+                    :
+                    parsedData
+                    ?
+                            <div className="mt-20"><GenerateResumeMessage /></div>
+                        
+                    :
+                        <div className="mt-20">
                             <DefaultResumeMessage />
-                    }
-                </div>
+                        </div>
+
+                }
             </main>
         </div>
     )

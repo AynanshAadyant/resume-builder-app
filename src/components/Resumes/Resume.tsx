@@ -42,12 +42,11 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
     };
 
     return (
-        <div 
-            ref={ref}
+        <div    
             className={`bg-gray-200 ${className}`}>
-            <div className="bg-white w-[210mm] max-w-full min-h-[297mm] mx-auto shadow-lg ">
-                <div className="w-full text-black px-15 py-5 leading-relaxed text-[15px]">                
-                        <header className="text-center border-b-2 border-black pb-4 mb-6">
+            <div ref={ref} className="bg-white w-[210mm] max-w-full min-h-[297mm] mx-auto shadow-lg ">
+                <div className="w-full text-black px-15 py-5 leading-relaxed text-[15px] flex flex-col gap-2">                
+                        <header className="text-center">
                             <h1 className="resume-heading text-3xl font-bold">
                                 {user?.name || "Candidate Name"}
                             </h1>
@@ -79,7 +78,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                             href={profile.linkedIn}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="hover:underline"
+                                            className="hover:underline text-blue-600"
                                         >
                                             LinkedIn
                                         </a>
@@ -93,7 +92,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                             href={profile.github}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="hover:underline"
+                                            className="hover:underline text-blue-600"
                                         >
                                             GitHub
                                         </a>
@@ -124,27 +123,27 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                 Experience
                             </h2>
 
-                            <div className="flex flex-col gap-4 mb-2">
+                            <div className="flex flex-col gap-2">
                                 {resume.workExp.map( ( exp, index ) => (
                                     <div key={ exp._id ?? index }>
                                         <div className="flex flex-row justify-between items-center">
                                             <div>
-                                                <h3 className="resume-role font-bold">{exp.organisation}</h3>
+                                                <h3 className="resume-role font-bold">{exp.company}</h3>
 
-                                                <p className="resume-role text-gray-500"> {exp.post} </p>
+                                                <p className="resume-role text-gray-700"> {exp.position} </p>
                                                 
                                             </div>
 
                                             <div className="resume-date flex flex-col">
                                                 <p>  { formatDate( exp.startDate)} {" - "} {formatDate( exp.endDate) ||"Present"} </p>
-                                                <p className="text-right text-sm text-gray-500">
+                                                <p className="text-right text-sm text-gray-700">
                                                     { exp.location} {exp.type || ""}
                                                 </p>
                                             </div>
                                         </div>
-                                        <ul className="resume-list ">
-                                            {exp.contents.map((point, idx) => (
-                                                <li className="resume-list-item font-semibold text-[13px]" key={idx}> - {point}</li>
+                                        <ul className="resume-list leading-5 text-justify">
+                                            {exp.responsibilities.map((point, idx) => (
+                                                <li className="resume-list-item list-disc font-medium text-[13px]" key={idx}>{point}</li>
                                             ))}
                                         </ul>
                                     </div>
@@ -182,11 +181,11 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                         }
                                                     </h3>
 
-                                                    {project.techStack
+                                                    {project.tech_stack
                                                         ?.length >
                                                         0 && (
                                                         <p className="text-sm text-gray-600">
-                                                            {project.techStack.join(
+                                                            {project.tech_stack.join(
                                                                 "  |  "
                                                             )}
                                                         </p>
@@ -194,10 +193,10 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 </div>
 
                                                 <div className="flex gap-3 text-sm">
-                                                    {project.githubLink && (
+                                                    {project.github_link && (
                                                         <a
                                                             href={
-                                                                project.githubLink
+                                                                project.github_link
                                                             }
                                                             target="_blank"
                                                             rel="noreferrer"
@@ -207,10 +206,10 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                         </a>
                                                     )}
 
-                                                    {project.projectLink && (
+                                                    {project.live_link && (
                                                         <a
                                                             href={
-                                                                project.projectLink
+                                                                project.live_link
                                                             }
                                                             target="_blank"
                                                             rel="noreferrer"
@@ -222,10 +221,10 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                                 </div>
                                             </div>
 
-                                            <ul className="list">
-                                                {project.contents.map((point, idx) => (
-                                                    <li key={idx} className="text-[12px] font-semibold">
-                                                        - {point}
+                                            <ul className="list text-justify">
+                                                {project.description.map((point : any, idx : any) => (
+                                                    <li key={idx} className="text-[12px] list-disc font-semibold">
+                                                        {point}
                                                     </li>
                                                 ))}
                                             </ul>
@@ -254,7 +253,7 @@ const ResumePreview = forwardRef<HTMLDivElement, ResumePreviewProps>(
                                         </span>
 
                                         <span className="font-semibold text-[12px]">
-                                            {skill.values.join(", ")}
+                                            {skill.name.join(", ")}
                                         </span>
                                     </div>
                             ))}

@@ -80,7 +80,7 @@ export default function DashboardSettings() {
     const updateName = async() => {
         setSavingProfile( true );
         try {
-            const response = await api.put( "/auth/update", {userName} );
+            const response = await api.put( "/auth/update", {name : userName} );
             if( response.success ) {
                 toast.success( response.message );
             }
@@ -104,7 +104,7 @@ export default function DashboardSettings() {
     useEffect( () => { fetchInitialData() }, [] );
 
     return (
-        <div className="p-8 w-full max-w-[1180px] pb-12">
+        <div className="p-8 w-full max-w-[1180px] pb-12 font-['Satoshi']">
             <header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <div>
                     <h2 className="font-['Satoshi'] text-3xl font-bold text-slate-950">Settings</h2>

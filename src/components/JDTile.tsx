@@ -13,7 +13,7 @@ interface JDTileProps {
     jd : any,
     index : number
 }
-export default function JDTile({jd, index} : JDTileProps) {
+export default function JDTile({jd} : JDTileProps) {
 
     const handleDelete = async() => {
         try {

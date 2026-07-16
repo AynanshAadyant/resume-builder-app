@@ -1,13 +1,33 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router"
 import { Sparkles } from "lucide-react";
-import { useAppSelector } from "@/store/hooks";
+import { useEffect, useState } from "react";
+import api from "@/api/api";
 
 function AuthButtons() {
-    const isAuthenticated = useAppSelector( (state) => state.auth.isAuthenticated )
-    if (isAuthenticated) {
+    const [authenticated, setAuthenticated ] = useState(false);
+
+    const fetchUser = async() => {
+        try {
+            const response = await api.get( "/auth/current" );
+            if( response.success ) {
+                setAuthenticated( true );
+            }
+            else
+                return false;
+        }
+        catch( e:any) {
+            console.error( e );
+        }
+    }
+
+    useEffect(  () => {
+        fetchUser();
+    }, [])
+
+    if (authenticated) {
         return (
-            <Link to="/dashboard"> <Button variant="ghost" className="text-white hover:bg-sky-400 cursor-pointer px-5"> Dashboard</Button></Link>
+            <Link to="/dashboard"> <Button variant="default" className="bg-cyan-300 text-sky-950 font-bold hover:bg-white hover:text-black cursor-pointer px-5"> Dashboard</Button></Link>
         )
     }
     else {

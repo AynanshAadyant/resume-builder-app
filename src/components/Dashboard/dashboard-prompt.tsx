@@ -171,34 +171,45 @@ export default function ResumeFromPrompt() {
             </aside>
 
             {/* Right Panel: Resume Studio */}
-            <main className="flex-1 overflow-auto p-8">                
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-[var(--secondary)]/10 blur-3xl rounded-full" />
-                    <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-cyan-500/5 blur-3xl rounded-full" />
-                </div>
-                <div className="rights h-[calc(100vh-80px)] overflow-y-auto overflow-x-auto">
-                    {
-                        resumeError
-                        ?
-                            <ResumeErrorMessage />
-                        :
-                        resumeData 
-                        ?
-                            <div className="resume-container">
-                                <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} className="" />
-                                <button onClick={ 
-                                    handleDownload
-                                }> Download </button>
-                            </div>
-                        :
-                        resumeLoading
-                        ?
-                            <GeneratingResumeMessage />
-                        :
-                            <DefaultResumeMessage />
-                    }
-                </div>
-            </main>
+            <main className="flex-1
+                                    flex
+                                    flex-col
+                                    items-center
+                                    overflow-x-scroll
+                                    overflow-y-auto
+                                    h-full
+                                    bg-[var(--surface-container-low)]
+                            ">                
+                            {
+                                resumeError
+                                ?
+                                    <div className="mt-20">
+                                        <ResumeErrorMessage />
+                                    </div>
+                                :
+                                resumeData 
+                                ?
+                                    <div className="resume-container p-10 bg-gray-200 flex flex-col justify-center items-center">
+                                        <ResumePreview ref={resumeRef} resume={resumeData} profile={p.profile} user={user} />
+                                        <button onClick={ 
+                                            handleDownload
+                                        }
+                                        className="bg-black rounded-full z-50 fixed bottom-5 px-8 py-1 text-white"
+                                        > Download </button>
+                                    </div>
+                                :
+                                resumeLoading
+                                ?
+                                    <div className="mt-20">
+                                        <GeneratingResumeMessage />
+                                    </div>
+                                :
+                                    <div className="mt-20">
+                                        <DefaultResumeMessage />
+                                    </div>
+            
+                            }
+                        </main>
         </div>
     )
 }

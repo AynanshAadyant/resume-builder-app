@@ -7,7 +7,7 @@ export interface Project {
     description: string[];
     startDate?: string | Date;
     endDate?: string | Date;
-    features ?: string;
+    features ?: string[];
     github_link?: string;
     live_link?: string;
     user?: string | User;
