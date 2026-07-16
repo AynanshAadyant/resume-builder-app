@@ -1,15 +1,40 @@
+import api from "@/api/api";
 import {
     Collapsible, CollapsibleTrigger, CollapsibleContent
 } from "@/components/ui/collapsible"
+import { Trash2 } from "lucide-react";
+import { Button } from "./ui/button";
 import {
     ChevronDown
 } from "lucide-react"
+import { toast } from "sonner";
 
 interface JDTileProps { 
     jd : any,
     index : number
 }
 export default function JDTile({jd, index} : JDTileProps) {
+
+    const handleDelete = async() => {
+        try {
+            if( !jd._id ) {
+                toast.error( "Cannot delete JD" );
+            }
+            const response = await api.delete(`/jd/${jd._id}`)
+            if( response.success ) {
+                toast.info("Job Description deleted successfully" );
+            }
+            else {
+                toast.error( "Something went wrong" );
+                console.error( response );
+            }
+        }
+        catch( e : any ) {
+            console.log( e );
+            toast.error( "Something went wrong" );
+        }
+    }
+
     const company =
         jd?.parsedText?.metadata?.company || "Unknown Company";
 
@@ -37,8 +62,8 @@ export default function JDTile({jd, index} : JDTileProps) {
     return (
             <div className="jd w-full group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-cyan-200 hover:shadow-md">
                 <Collapsible>
-
-                <div className="flex items-start justify-between">
+                    
+                <div className="flex flex-row justify-between "> 
                     <div>
                         <h4 className="font-['Inter'] text-base font-semibold text-slate-950">
                             {jobTitle}
@@ -49,9 +74,7 @@ export default function JDTile({jd, index} : JDTileProps) {
                         </p>
                     </div>
 
-                <div className="rounded-lg bg-cyan-50 px-2 py-1 text-xs font-semibold text-cyan-700">
-                    JD #{index + 1}
-                </div>
+                    <Button onClick={handleDelete}> <Trash2 />  </Button>               
                 </div>
 
                 <div className="mt-3 flex items-center justify-between">
