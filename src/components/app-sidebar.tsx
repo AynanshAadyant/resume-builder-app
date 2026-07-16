@@ -70,8 +70,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   return (
-    <Sidebar className="border-r border-slate-200 bg-white" {...props}>
-      <SidebarHeader className="mb-6 px-4 pt-6">
+    <Sidebar className="border-r border-slate-200 bg-white z-50" {...props}>
+      <SidebarHeader className="mb-6 px-4 pt-6 ">
         <Link to="/dashboard" className="flex flex-col">
           <h1 className="font-['Satoshi'] text-2xl font-bold text-slate-950">ResumeAI</h1>
           <p className="mt-1 font-['Inter'] text-xs font-semibold uppercase text-slate-500">Career OS</p>
